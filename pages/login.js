@@ -17,7 +17,7 @@ export default function Login() {
     }
     // Cliente ospite
     if (username === 'bellavedutaospite' && password === 'marmiepietre') {
-      router.push('/')  // torna alla galleria pubblica
+      router.push('/')  // galleria pubblica
       return
     }
     alert('Credenziali non valide')
@@ -27,8 +27,10 @@ export default function Login() {
     <div>
       <Header/>
       <div className="flex items-center justify-center h-screen">
+        {/* noValidate disabilita la validazione HTML5 */}
         <form
           onSubmit={handleLogin}
+          noValidate
           className="bg-white p-6 rounded shadow-md w-full max-w-sm"
         >
           <h2 className="text-2xl mb-4 text-center">Admin Login</h2>
