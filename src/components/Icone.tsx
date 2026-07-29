@@ -26,6 +26,7 @@ export type NomeIcona =
   | "viso"
   | "ciglia"
   | "massaggi"
+  | "capelli"
   | "lente"
   | "campana"
   | "indietro"
@@ -49,6 +50,8 @@ const TRACCIATI: Record<NomeIcona, string> = {
   ciglia: '<path d="M2 13s4-6 10-6 10 6 10 6"/><path d="M6 10 4 7M12 8V4.5M18 10l2-3"/>',
   massaggi:
     '<path d="M4 16c3-4 6-4 8 0M4 16c-1 2 0 4 2 4h12c2 0 3-2 2-4"/><circle cx="12" cy="7" r="3"/>',
+  capelli:
+    '<circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M7.7 16.2 18 4M16.3 16.2 6 4"/>',
   lente: '<circle cx="11" cy="11" r="6"/><path d="m20 20-4.5-4.5"/>',
   campana: '<path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6z"/><path d="M10 19a2 2 0 0 0 4 0"/>',
   indietro: '<path d="m15 5-7 7 7 7"/>',
@@ -58,6 +61,12 @@ const TRACCIATI: Record<NomeIcona, string> = {
 };
 
 export function Icona({ nome, className, style }: Props) {
+  // Senza questo, aggiungere una categoria e dimenticare la sua icona passa
+  // `undefined` a dangerouslySetInnerHTML e fa fallire il build dell'intera
+  // pagina, con un errore che non nomina la causa.
+  const tracciato = TRACCIATI[nome];
+  if (!tracciato) return null;
+
   return (
     <svg
       viewBox="0 0 24 24"
@@ -69,7 +78,7 @@ export function Icona({ nome, className, style }: Props) {
       strokeWidth={1.7}
       strokeLinecap="round"
       strokeLinejoin="round"
-      dangerouslySetInnerHTML={{ __html: TRACCIATI[nome] }}
+      dangerouslySetInnerHTML={{ __html: tracciato }}
     />
   );
 }
@@ -86,4 +95,5 @@ export const ICONA_CATEGORIA: Record<string, NomeIcona> = {
   viso: "viso",
   ciglia: "ciglia",
   massaggi: "massaggi",
+  capelli: "capelli",
 };

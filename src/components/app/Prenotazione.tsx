@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Icona } from "@/components/Icone";
 import { Faccia, Foto, fotoCategoria, RigaServizio } from "@/components/app/Pezzi";
+import { SelettoreSede } from "@/components/app/SelettoreSede";
 import { useStatoApp } from "@/components/StatoApp";
 import { SERVIZI, servizio } from "@/lib/data/services";
 import {
@@ -13,6 +14,7 @@ import {
   operatrice,
 } from "@/lib/data/staff";
 import { eChiuso, GIORNI, MESI, QUOTA_ACCONTO } from "@/lib/data/salon";
+import { sede, sediPerCategoria } from "@/lib/data/sedi";
 import { raggruppaPerFascia, slotLiberi, type Slot } from "@/lib/booking/slots";
 import { repo } from "@/lib/store";
 import type { Appuntamento } from "@/lib/store/types";
@@ -24,7 +26,7 @@ type Fase = "scelta" | "compilazione" | "pagamento" | "fatto";
 
 export function Prenotazione() {
   const parametri = useSearchParams();
-  const { registraPrenotazione } = useStatoApp();
+  const { sedeId, registraPrenotazione } = useStatoApp();
 
   const [servizioId, setServizioId] = useState<string | null>(
     parametri.get("servizio"),
@@ -52,7 +54,7 @@ export function Prenotazione() {
     let annullato = false;
     setCaricamentoSlot(true);
     repo()
-      .listaPerGiorno(chiaveGiorno(giorno))
+      .listaPerGiorno(sedeId, chiaveGiorno(giorno))
       .then((a) => {
         if (!annullato) setAppuntamentiDelGiorno(a);
       })
@@ -62,17 +64,18 @@ export function Prenotazione() {
     return () => {
       annullato = true;
     };
-  }, [giorno]);
+  }, [giorno, sedeId]);
 
   const slot = useMemo(() => {
     if (!giorno || !servizioId) return [];
     return slotLiberi({
       data: giorno,
       servizioId,
+      sedeId,
       operatriceId,
       appuntamenti: appuntamentiDelGiorno,
     });
-  }, [giorno, servizioId, operatriceId, appuntamentiDelGiorno]);
+  }, [giorno, servizioId, sedeId, operatriceId, appuntamentiDelGiorno]);
 
   const { mattina, pomeriggio } = useMemo(() => raggruppaPerFascia(slot), [slot]);
 
@@ -100,10 +103,11 @@ export function Prenotazione() {
 
       // Rileggo l'agenda un attimo prima di scrivere: fra la scelta dello slot
       // e la conferma qualcun altro potrebbe averlo preso.
-      const aggiornati = await repo().listaPerGiorno(chiaveGiorno(giorno));
+      const aggiornati = await repo().listaPerGiorno(sedeId, chiaveGiorno(giorno));
       const ancoraLibero = slotLiberi({
         data: giorno,
         servizioId: srv.id,
+        sedeId,
         operatriceId,
         appuntamenti: aggiornati,
       }).some(
@@ -121,6 +125,7 @@ export function Prenotazione() {
       }
 
       const creato = await repo().crea({
+        sedeId,
         giorno: chiaveGiorno(giorno),
         inizio: slotScelto.inizio,
         durata: srv.durata,
@@ -155,7 +160,7 @@ export function Prenotazione() {
       setErrore("Qualcosa è andato storto. Riprova fra un momento.");
       setFase("compilazione");
     }
-  }, [srv, giorno, slotScelto, modalita, operatriceId, registraPrenotazione]);
+  }, [srv, giorno, slotScelto, modalita, sedeId, operatriceId, registraPrenotazione]);
 
   /* ── Nessun trattamento scelto ────────────────────────────────── */
   if (!srv) {
@@ -222,6 +227,10 @@ export function Prenotazione() {
               <b>{op?.nome}</b>
             </div>
             <div>
+              <span>Dove</span>
+              <b>{sede(sedeId)?.etichetta}</b>
+            </div>
+            <div>
               <span>Quando</span>
               <b>
                 {GIORNI[giorno.getDay()]} {giorno.getDate()} {MESI[giorno.getMonth()]},{" "}
@@ -261,7 +270,7 @@ export function Prenotazione() {
   }
 
   /* ── Scelta di data e orario ──────────────────────────────────── */
-  const abilitate = abilitatePer(srv.categoria);
+  const abilitate = abilitatePer(srv.categoria, sedeId);
   const opScelta = operatriceId === NESSUNA_PREFERENZA ? null : operatrice(operatriceId);
   const acconto = Math.round(srv.prezzo * QUOTA_ACCONTO);
   const daPagare = importoDovuto(srv.prezzo, modalita, QUOTA_ACCONTO);
@@ -280,6 +289,21 @@ export function Prenotazione() {
         <span style={{ width: 34, flex: "none" }} />
         <h1 className="titolo-schermo">Prenota la tua visita</h1>
         <span style={{ width: 34, flex: "none" }} />
+      </div>
+
+      <div className="sez-cap pad" style={{ marginTop: 0 }}>
+        <h2 className="sez-tit">In quale sede</h2>
+      </div>
+      <div className="pad" style={{ marginBottom: "0.9rem" }}>
+        <SelettoreSede
+          soloSedi={sediPerCategoria(srv.categoria).map((x) => x.id)}
+          onCambio={() => {
+            // Cambiare sede cambia il personale e l'agenda: le scelte fatte
+            // dopo non valgono più.
+            setOperatriceId(NESSUNA_PREFERENZA);
+            setSlotScelto(null);
+          }}
+        />
       </div>
 
       <div className="card riepilogo-srv">

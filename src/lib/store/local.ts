@@ -17,10 +17,11 @@ import type {
   NuovoAppuntamento,
 } from "./types";
 
-const CHIAVE = "claudia-nails:appuntamenti:v1";
+const CHIAVE = "claudia-nails:appuntamenti:v2";
 /** Alzare quando cambia la forma dei dati, per invalidare i seed vecchi. */
 const CHIAVE_VERSIONE = "claudia-nails:versione";
-const VERSIONE = "1";
+// v2: gli appuntamenti portano la sede.
+const VERSIONE = "2";
 
 function disponibile(): boolean {
   if (typeof window === "undefined") return false;
@@ -80,8 +81,9 @@ function nuovoId(): string {
 }
 
 export const repoLocale: AppointmentsRepo = {
-  async listaPerIntervallo(da, a, operatriceId) {
+  async listaPerIntervallo(sedeId, da, a, operatriceId) {
     return leggi()
+      .filter((x) => x.sedeId === sedeId)
       .filter((x) => x.giorno >= da && x.giorno <= a)
       .filter((x) => !operatriceId || x.operatriceId === operatriceId)
       .sort((x, y) =>
@@ -91,9 +93,9 @@ export const repoLocale: AppointmentsRepo = {
       );
   },
 
-  async listaPerGiorno(giorno) {
+  async listaPerGiorno(sedeId, giorno) {
     return leggi()
-      .filter((x) => x.giorno === giorno)
+      .filter((x) => x.sedeId === sedeId && x.giorno === giorno)
       .sort((x, y) => x.inizio - y.inizio);
   },
 

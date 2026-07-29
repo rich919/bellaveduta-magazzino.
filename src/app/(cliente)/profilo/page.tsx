@@ -9,6 +9,7 @@ const VOCI = [
   { href: "/profilo/prenotazioni", icona: "📅", testo: "Le mie prenotazioni" },
   { href: "/carrello", icona: "🛍", testo: "Il mio carrello" },
   { href: "/profilo/tessera", icona: "★", testo: "Tessera e premi" },
+  { href: "/staff", icona: "✦", testo: "Chi siamo" },
   { href: "/dove-siamo", icona: "◎", testo: "Dove siamo" },
 ];
 

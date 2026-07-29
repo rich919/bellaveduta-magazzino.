@@ -1,8 +1,9 @@
 # Claudia Nails — app del centro estetico
 
-App mobile per **Claudia Nails**, centro estetico in Via Nicolò da Pistoia 38,
-Roma Garbatella. Le clienti prenotano scegliendo trattamento, operatrice, giorno
-e orario; la titolare vede la giornata in un gestionale su un indirizzo separato.
+App mobile per **Claudia Nails**, centro estetico con **due sedi a Roma**:
+Garbatella (Via Nicolò da Pistoia 38) e Montagnola (Piazzale Caduti della
+Montagnola 7). Le clienti scelgono la sede, poi trattamento, operatrice, giorno e
+orario; il gestionale mostra le due agende, su un indirizzo separato.
 
 **È una demo.** Prima di darla in mano alle clienti va letta la sezione
 "Cosa va confermato" in fondo: alcuni dati sono ipotesi dichiarate.
@@ -76,6 +77,24 @@ Tutta l'app parla con due sole interfacce, mai con l'implementazione:
   il numero di carta, perché quei dati non devono passare da noi. Per attivare
   Stripe: `stripe.ts` + webhook, e una riga in `payments/index.ts`.
 
+### Le due sedi
+
+Non sono un'etichetta: hanno **personale diverso**, **agende separate** e
+**listini diversi**. Il vincolo che struttura tutto è che il **parrucchiere
+esiste solo alla Montagnola**, quindi i trattamenti capelli non compaiono
+nemmeno quando la cliente ha scelto Garbatella.
+
+La sede scelta vive nello stato del cliente (`StatoApp`), si sceglie una volta e
+resta. Cambiarla azzera operatrice e orario già selezionati: sarebbero riferiti a
+persone che nell'altra sede non ci sono. Nel gestionale c'è un interruttore in
+testata; cambiando sede si azzera anche il filtro per operatrice, altrimenti
+resterebbe puntato su qualcuno che lì non lavora e la griglia sembrerebbe vuota
+senza spiegazione.
+
+Le eccezioni si dichiarano in `sedi.ts` con `categorieEscluse`: elencare cosa
+*manca* invece di cosa *c'è* evita di dimenticarsi di abilitare una categoria
+nuova su entrambe.
+
 ### Disponibilità
 
 `src/lib/booking/slots.ts` è la parte con più insidie, quindi è tutta in funzioni
@@ -86,6 +105,7 @@ pure e coperta da 19 test (`npm test`). Le regole:
   può iniziare un servizio da un'ora;
 - la disponibilità è **per operatrice**, e solo fra quelle abilitate a quella
   categoria;
+- si propone solo chi **lavora in quella sede**;
 - gli appuntamenti annullati liberano il posto;
 - oggi non si propongono orari già passati;
 - con "nessuna preferenza" l'assegnazione **bilancia il carico** e preferisce la
@@ -94,8 +114,16 @@ pure e coperta da 19 test (`npm test`). Le regole:
 
 ## Immagini
 
-Le foto sono generate con **kie.ai** (`google/nano-banana`, 1K) e **committate**
-in `public/images`. È una scelta, non una scorciatoia: gli URL restituiti da
+Le 44 foto sono generate con **kie.ai** (`google/nano-banana`, 1K) e
+**committate** in `public/images`.
+
+La coerenza fra scatti diversi non viene dai singoli prompt ma da una radice
+comune (`STILE` in `generate-images.mjs`) che fissa quattro cose e non le cambia
+mai: **stessa ottica** (medio formato, 85mm), **stessa luce** (finestra da
+sinistra, ombre morbide), **stessa palette** (crema, rosa antico, cammello,
+terracotta chiara, desaturati) e **stessa resa di pellicola**. Cambiarne anche
+una sola su metà delle immagini basta a far sembrare la serie un collage di
+stock diversi. È una scelta, non una scorciatoia: gli URL restituiti da
 kie.ai **scadono dopo 24 ore**, quindi un sito che li linkasse resterebbe senza
 foto il giorno dopo il deploy. Committandole diventano file statici sulla CDN di
 Vercel: restano per sempre, non costano nulla per visita, e la chiave API non
@@ -120,19 +148,25 @@ segnalati anche dentro l'app.
    scheda Treatwell del salone. Le altre sono ipotesi ancorate al "da € X" che
    Treatwell mostra per quelle categorie: nel codice hanno `verificato: false` e
    nell'app portano l'etichetta *da confermare*.
-2. **Nomi delle operatrici.** Claudia, Martina, Sara e Giulia sono segnaposto:
-   né Treatwell né claudianails.it pubblicano il personale. Si cambiano in
-   `src/lib/data/staff.ts` mantenendo gli `id`.
+2. **Assegnazione dello staff alle sedi.** Nomi e ruoli delle otto persone —
+   Claudia, Gloria, Angela, Martina, Giorgia, Letizia, Michela, Melania — sono
+   quelli **veri** della pagina "Chi siamo". Il sito però non dice chi lavora
+   dove: l'unico vincolo certo è che Gloria, unica parrucchiera, sta alla
+   Montagnola. La ripartizione del resto, e le competenze di dettaglio, sono una
+   proposta da confermare in `src/lib/data/staff.ts`.
 3. **Prodotti ghd.** I nomi sono quelli reali di catalogo, i prezzi sono stime al
    listino italiano. Le **fotografie sono still life generici e senza marchio**:
    non riproducono i prodotti ghd e vanno sostituite con quelle ufficiali fornite
    dal marchio, come è prassi per un rivenditore autorizzato.
 4. **Tessera a punti.** Soglie, premi e vantaggi in `src/lib/membership.ts` sono
    una proposta: quanto essere generosi è una decisione commerciale.
-5. **Recensioni.** Quelle in `salon.ts` sono scritte per la demo. Le vere vanno
+5. **Listino del parrucchiere.** Il servizio è confermato dal sito ufficiale ma
+   il listino non è pubblicato: prezzi e durate dei cinque trattamenti capelli
+   sono stime.
+6. **Recensioni.** Quelle in `salon.ts` sono scritte per la demo. Le vere vanno
    importate da Treatwell.
-6. **Ritratti e ambienti.** Sono immagini generate: non ritraggono il salone
-   reale né persone reali.
+7. **Ritratti e ambienti.** Sono immagini generate: i ritratti dello staff sono
+   segnaposto e **non ritraggono le persone vere**, che vanno fotografate.
 
 ## Limite noto: i dati non sono condivisi
 

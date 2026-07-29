@@ -26,7 +26,8 @@ export type CategoriaId =
   | "ceretta"
   | "viso"
   | "ciglia"
-  | "massaggi";
+  | "massaggi"
+  | "capelli";
 
 export type Categoria = {
   id: CategoriaId;
@@ -114,6 +115,14 @@ export const CATEGORIE: readonly Categoria[] = [
     descrizione: "Rilassanti, decontratturanti, esfolianti.",
     tinta: "--cat-massaggi",
   },
+  {
+    id: "capelli",
+    etichetta: "Capelli",
+    nome: "Parrucchiere",
+    // Solo alla Montagnola: vedi categorieEscluse in sedi.ts.
+    descrizione: "Taglio, piega e colore. Solo alla Montagnola.",
+    tinta: "--cat-capelli",
+  },
 ] as const;
 
 export type Servizio = {
@@ -184,6 +193,14 @@ const RIGHE: ReadonlyArray<
   ["ciglia", "Refill extension ciglia", 35, 60, false, "Mantenimento a tre settimane."],
 
   ["massaggi", "Massaggio decontratturante", 40, 60, false, "Lavoro mirato sulle contratture."],
+
+  // Parrucchiere, disponibile solo alla Montagnola. Il sito ufficiale conferma
+  // il servizio ma non pubblica il listino: prezzi e durate sono da confermare.
+  ["capelli", "Taglio e piega", 35, 60, false, "Taglio su misura e piega finale."],
+  ["capelli", "Piega", 20, 40, false, "Solo la piega, su capelli già lavati."],
+  ["capelli", "Colore e piega", 55, 90, false, "Colore completo e piega."],
+  ["capelli", "Colpi di sole", 65, 105, false, "Schiariture su tutta la lunghezza."],
+  ["capelli", "Trattamento ricostruttivo", 30, 45, false, "Per capelli sfibrati da colore e calore."],
 ];
 
 export const SERVIZI: readonly Servizio[] = RIGHE.map(

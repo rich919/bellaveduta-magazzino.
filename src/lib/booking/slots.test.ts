@@ -21,14 +21,23 @@ import type { Appuntamento } from "../store/types";
 const MERCOLEDI = new Date(2026, 6, 29); // aperto 10:00–19:00
 const DOMENICA = new Date(2026, 7, 2); // chiuso
 
-/** Semipermanente mani monocolore: 60 minuti. Lo fanno Claudia e Martina. */
+const GARBATELLA = "garbatella" as const;
+const MONTAGNOLA = "montagnola" as const;
+
+/** Semipermanente mani monocolore: 60 minuti. A Garbatella lo fanno
+ *  Claudia, Giorgia e Letizia. */
 const SERVIZIO_60 = SERVIZI.find(
   (s) => s.categoria === "semipermanente-mani" && s.nome === "Monocolore",
 )!;
 
-/** Extension ciglia: 90 minuti. La fanno Giulia (specialista) e Claudia (titolare). */
+/** Extension ciglia: 90 minuti. A Garbatella lo fanno Claudia e Martina. */
 const SERVIZIO_CIGLIA = SERVIZI.find(
   (s) => s.categoria === "ciglia" && s.nome === "Extension ciglia volume",
+)!;
+
+/** Taglio e piega: solo alla Montagnola, e solo Gloria. */
+const SERVIZIO_CAPELLI = SERVIZI.find(
+  (s) => s.categoria === "capelli" && s.nome === "Taglio e piega",
 )!;
 
 function appuntamento(
@@ -39,6 +48,7 @@ function appuntamento(
 ): Appuntamento {
   return {
     id: `t-${operatriceId}-${inizio}`,
+    sedeId: GARBATELLA,
     giorno: chiaveGiorno(MERCOLEDI),
     inizio,
     durata,
@@ -65,10 +75,12 @@ function slot(
   appuntamenti: Appuntamento[] = [],
   data = MERCOLEDI,
   servizioId = SERVIZIO_60.id,
+  sedeId: "garbatella" | "montagnola" = GARBATELLA,
 ) {
   return slotLiberi({
     data,
     servizioId,
+    sedeId,
     operatriceId,
     appuntamenti,
     adesso: PRIMA_DELL_APERTURA,
@@ -106,7 +118,7 @@ describe("slotLiberi — orari di apertura", () => {
   });
 
   it("per un servizio da 90′ l'ultimo orario è le 17:30", () => {
-    const orari = slot("giulia", [], MERCOLEDI, SERVIZIO_CIGLIA.id).map(
+    const orari = slot("martina", [], MERCOLEDI, SERVIZIO_CIGLIA.id).map(
       (s) => s.inizio,
     );
     assert.equal(Math.max(...orari), 17 * 60 + 30);
@@ -115,8 +127,8 @@ describe("slotLiberi — orari di apertura", () => {
 
 describe("slotLiberi — competenze delle operatrici", () => {
   it("non propone chi non sa fare quel trattamento", () => {
-    // Sara fa ceretta e pedicure, non le extension ciglia.
-    assert.deepEqual(slot("sara", [], MERCOLEDI, SERVIZIO_CIGLIA.id), []);
+    // Giorgia è onicotecnica: le extension ciglia non le fa.
+    assert.deepEqual(slot("giorgia", [], MERCOLEDI, SERVIZIO_CIGLIA.id), []);
   });
 
   it("con nessuna preferenza assegna solo operatrici abilitate", () => {
@@ -125,22 +137,22 @@ describe("slotLiberi — competenze delle operatrici", () => {
         (s) => s.operatriceId,
       ),
     );
-    // Sara e Martina non fanno ciglia: non devono mai comparire.
-    for (const id of assegnate) assert.ok(["giulia", "claudia"].includes(id));
+    // A Garbatella le ciglia le fanno solo Claudia e Martina.
+    for (const id of assegnate) assert.ok(["martina", "claudia"].includes(id));
   });
 
   it("preferisce la specialista alla titolare, che sa fare tutto", () => {
-    // Ad agenda vuota Claudia e Giulia sono entrambe libere. Deve vincere
-    // Giulia: ha meno competenze, quindi è la persona più giusta per le ciglia.
+    // Ad agenda vuota Claudia e Martina sono entrambe libere. Deve vincere
+    // Martina: ha meno competenze, quindi è la scelta più giusta.
     const primo = slot(NESSUNA_PREFERENZA, [], MERCOLEDI, SERVIZIO_CIGLIA.id)[0];
-    assert.equal(primo.operatriceId, "giulia");
+    assert.equal(primo.operatriceId, "martina");
   });
 
   it("passa alla titolare quando la specialista è più carica", () => {
-    const giuliaOccupata = [appuntamento("giulia", 600, 180)];
+    const martinaOccupata = [appuntamento("martina", 600, 180)];
     const alle10 = slot(
       NESSUNA_PREFERENZA,
-      giuliaOccupata,
+      martinaOccupata,
       MERCOLEDI,
       SERVIZIO_CIGLIA.id,
     ).find((s) => s.inizio === 600);
@@ -149,9 +161,61 @@ describe("slotLiberi — competenze delle operatrici", () => {
   });
 });
 
+describe("slotLiberi — le due sedi", () => {
+  it("il parrucchiere non si prenota a Garbatella", () => {
+    assert.deepEqual(
+      slot(NESSUNA_PREFERENZA, [], MERCOLEDI, SERVIZIO_CAPELLI.id, GARBATELLA),
+      [],
+    );
+  });
+
+  it("il parrucchiere si prenota alla Montagnola, con Gloria", () => {
+    const orari = slot(
+      NESSUNA_PREFERENZA,
+      [],
+      MERCOLEDI,
+      SERVIZIO_CAPELLI.id,
+      MONTAGNOLA,
+    );
+    assert.ok(orari.length > 0);
+    // Gloria è l'unica parrucchiera: nessun altro può comparire.
+    for (const s of orari) assert.equal(s.operatriceId, "gloria");
+  });
+
+  it("non propone chi lavora nell'altra sede", () => {
+    // Giorgia sta a Garbatella: alla Montagnola non deve mai uscire.
+    const alla = slot(
+      "giorgia",
+      [],
+      MERCOLEDI,
+      SERVIZIO_60.id,
+      MONTAGNOLA,
+    );
+    assert.deepEqual(alla, []);
+  });
+
+  it("la stessa richiesta dà personale diverso nelle due sedi", () => {
+    const aGarbatella = new Set(
+      slot(NESSUNA_PREFERENZA, [], MERCOLEDI, SERVIZIO_60.id, GARBATELLA).map(
+        (s) => s.operatriceId,
+      ),
+    );
+    const allaMontagnola = new Set(
+      slot(NESSUNA_PREFERENZA, [], MERCOLEDI, SERVIZIO_60.id, MONTAGNOLA).map(
+        (s) => s.operatriceId,
+      ),
+    );
+    assert.ok(aGarbatella.size > 0 && allaMontagnola.size > 0);
+    // Solo Claudia gira su entrambe: tutti gli altri sono esclusivi.
+    for (const id of aGarbatella) {
+      if (id !== "claudia") assert.ok(!allaMontagnola.has(id));
+    }
+  });
+});
+
 describe("slotLiberi — agenda occupata", () => {
   it("toglie gli orari coperti da un appuntamento della stessa operatrice", () => {
-    const orari = slot("martina", [appuntamento("martina", 600, 60)]).map(
+    const orari = slot("giorgia", [appuntamento("giorgia", 600, 60)]).map(
       (s) => s.inizio,
     );
     // Un servizio da 60′ non entra prima delle 11:00 se le 10–11 sono prese.
@@ -161,7 +225,7 @@ describe("slotLiberi — agenda occupata", () => {
   });
 
   it("l'agenda di una non tocca quella dell'altra", () => {
-    const occupata = [appuntamento("martina", 600, 60)];
+    const occupata = [appuntamento("giorgia", 600, 60)];
     assert.equal(
       slot("claudia", occupata).some((s) => s.inizio === 600),
       true,
@@ -169,16 +233,21 @@ describe("slotLiberi — agenda occupata", () => {
   });
 
   it("con nessuna preferenza lo slot resta se almeno una è libera", () => {
-    // Martina occupata alle 10, Claudia libera: le 10:00 devono restare.
+    // Giorgia occupata alle 10, le altre libere: le 10:00 devono restare.
     const alle10 = slot(NESSUNA_PREFERENZA, [
-      appuntamento("martina", 600, 60),
+      appuntamento("giorgia", 600, 60),
     ]).find((s) => s.inizio === 600);
     assert.ok(alle10);
-    assert.equal(alle10.operatriceId, "claudia");
+    assert.notEqual(alle10.operatriceId, "giorgia");
   });
 
   it("sparisce solo quando tutte le abilitate sono occupate", () => {
-    const piena = [appuntamento("claudia", 600, 60), appuntamento("martina", 600, 60)];
+    // A Garbatella il semipermanente mani lo fanno Claudia, Giorgia e Letizia.
+    const piena = [
+      appuntamento("claudia", 600, 60),
+      appuntamento("giorgia", 600, 60),
+      appuntamento("letizia", 600, 60),
+    ];
     assert.equal(
       slot(NESSUNA_PREFERENZA, piena).some((s) => s.inizio === 600),
       false,
@@ -186,9 +255,9 @@ describe("slotLiberi — agenda occupata", () => {
   });
 
   it("un appuntamento annullato libera il posto", () => {
-    const annullato = [appuntamento("martina", 600, 60, { stato: "annullato" })];
+    const annullato = [appuntamento("giorgia", 600, 60, { stato: "annullato" })];
     assert.equal(
-      slot("martina", annullato).some((s) => s.inizio === 600),
+      slot("giorgia", annullato).some((s) => s.inizio === 600),
       true,
     );
   });
@@ -199,6 +268,7 @@ describe("slotLiberi — orari già passati", () => {
     const orari = slotLiberi({
       data: MERCOLEDI,
       servizioId: SERVIZIO_60.id,
+      sedeId: GARBATELLA,
       operatriceId: NESSUNA_PREFERENZA,
       appuntamenti: [],
       adesso: new Date(2026, 6, 29, 14, 20), // le 14:20 dello stesso giorno
@@ -212,6 +282,7 @@ describe("slotLiberi — orari già passati", () => {
     const orari = slotLiberi({
       data: domani,
       servizioId: SERVIZIO_60.id,
+      sedeId: GARBATELLA,
       operatriceId: NESSUNA_PREFERENZA,
       appuntamenti: [],
       adesso: new Date(2026, 6, 29, 18, 0),

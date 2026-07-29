@@ -11,7 +11,8 @@
 
 import { fasciaDi } from "../data/salon";
 import { SERVIZI } from "../data/services";
-import { OPERATRICI, saFare } from "../data/staff";
+import { inSede, saFare } from "../data/staff";
+import { SEDI, sedeOffre, type SedeId } from "../data/sedi";
 import { chiaveGiorno, daChiave, piuGiorni } from "../date";
 import type { Appuntamento, StatoAppuntamento, StatoPagamento } from "./types";
 
@@ -46,22 +47,31 @@ function scegli<T>(r: () => number, elenco: readonly T[]): T {
   return elenco[Math.floor(r() * elenco.length)];
 }
 
-/** Appuntamenti di un singolo giorno. */
-function perGiorno(data: Date, oggi: Date): Appuntamento[] {
+/** Appuntamenti di un singolo giorno, per una sola sede. */
+function perGiorno(data: Date, oggi: Date, sedeId: SedeId): Appuntamento[] {
   const fascia = fasciaDi(data);
   if (!fascia) return []; // domenica: chiuso
 
   const giorno = chiaveGiorno(data);
+  // Il seme comprende la sede, altrimenti le due agende sarebbero identiche.
   const r = generatore(
-    data.getFullYear() * 10000 + (data.getMonth() + 1) * 100 + data.getDate(),
+    data.getFullYear() * 10000 +
+      (data.getMonth() + 1) * 100 +
+      data.getDate() +
+      (sedeId === "montagnola" ? 7919 : 0),
   );
   const eSabato = data.getDay() === 6;
   const eePassato = data < oggi && chiaveGiorno(data) !== chiaveGiorno(oggi);
 
   const out: Appuntamento[] = [];
 
-  for (const op of OPERATRICI) {
-    const suoi = SERVIZI.filter((s) => saFare(op, s.categoria));
+  for (const op of inSede(sedeId)) {
+    // Solo i trattamenti che questa persona sa fare E che la sede offre:
+    // senza il secondo filtro, Garbatella si riempirebbe di pieghe.
+    const suoi = SERVIZI.filter(
+      (s) => saFare(op, s.categoria) && sedeOffre(sedeId, s.categoria),
+    );
+    if (suoi.length === 0) continue;
     let t = fascia.apre + Math.floor(r() * 40);
 
     while (t < fascia.chiude - 20) {
@@ -90,7 +100,8 @@ function perGiorno(data: Date, oggi: Date): Appuntamento[] {
       }
 
       out.push({
-        id: `seed-${giorno}-${op.id}-${t}`,
+        id: `seed-${sedeId}-${giorno}-${op.id}-${t}`,
+        sedeId,
         giorno,
         inizio: t,
         durata: srv.durata,
@@ -127,7 +138,8 @@ export function generaSeed(
 ): Appuntamento[] {
   const out: Appuntamento[] = [];
   for (let i = -giorniIndietro; i <= giorniAvanti; i++) {
-    out.push(...perGiorno(piuGiorni(oggi, i), oggi));
+    const data = piuGiorni(oggi, i);
+    for (const s of SEDI) out.push(...perGiorno(data, oggi, s.id));
   }
   return out;
 }

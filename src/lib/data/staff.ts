@@ -1,20 +1,27 @@
 /**
- * Le operatrici del salone.
+ * Lo staff.
  *
- * ATTENZIONE: questi nomi sono SEGNAPOSTO. Né Treatwell né claudianails.it
- * pubblicano i nomi del personale, quindi non c'era modo di ricavarli. L'unico
- * dato reale è "Claudia", che viene dall'insegna dell'attività.
+ * Nomi e ruoli sono quelli VERI, presi dalla pagina "Chi siamo" di
+ * claudianails.it (luglio 2026): Claudia titolare e onicotecnica, Gloria
+ * parrucchiera, Angela e Martina estetiste, Giorgia, Letizia, Michela e
+ * Melania onicotecniche.
  *
- * Vanno sostituiti con i nomi veri prima di mostrare l'app alle clienti.
- * Cambiare solo questo file: `id` è usato come chiave negli appuntamenti, quindi
- * se rinomini una persona mantieni lo stesso `id` oppure migra i dati esistenti.
+ * DUE COSE SONO INVECE IPOTESI E VANNO CONFERMATE:
  *
- * Le competenze non sono decorative: il wizard di prenotazione propone solo chi
- * è abilitata al trattamento scelto, e la disponibilità degli slot è calcolata
- * sull'agenda della singola operatrice.
+ * 1. L'ASSEGNAZIONE ALLE SEDI. Il sito non dice chi lavora dove. L'unico
+ *    vincolo certo è che il parrucchiere esiste solo alla Montagnola, quindi
+ *    Gloria è lì. Il resto è una ripartizione plausibile.
+ *
+ * 2. LE COMPETENZE PER CATEGORIA. Il ruolo dà l'indirizzo — un'onicotecnica fa
+ *    unghie, un'estetista fa ceretta e viso — ma la ripartizione fine è mia.
+ *
+ * Le competenze non sono decorative: il wizard propone solo chi è abilitata al
+ * trattamento scelto, e la disponibilità è calcolata sull'agenda della singola
+ * persona. Cambiando questi elenchi cambia ciò che le clienti possono prenotare.
  */
 
 import type { CategoriaId } from "./services";
+import type { SedeId } from "./sedi";
 
 export type Operatrice = {
   id: string;
@@ -23,73 +30,120 @@ export type Operatrice = {
   /** Iniziali, per l'avatar quando manca la foto. */
   iniziali: string;
   bio: string;
-  /** Categorie che questa persona può eseguire. */
+  /** In quali sedi lavora. Chi ne ha due copre entrambe le agende. */
+  sedi: readonly SedeId[];
   competenze: readonly CategoriaId[];
   /** Token CSS della tinta con cui compare nel gestionale. */
   tinta: string;
-  /** File in /public/images, generato da scripts/generate-images.mjs. */
   foto: string;
 };
 
-const TUTTE: readonly CategoriaId[] = [
+/** Tutto quello che si fa sulle unghie. */
+const UNGHIE: readonly CategoriaId[] = [
   "semipermanente-mani",
   "semipermanente-piedi",
   "semigel",
   "ricostruzione",
   "manicure",
-  "pedicure",
+];
+
+/** Il mestiere dell'estetista. */
+const ESTETICA: readonly CategoriaId[] = [
   "ceretta",
   "viso",
   "ciglia",
   "massaggi",
+  "pedicure",
 ];
 
 export const OPERATRICI: readonly Operatrice[] = [
   {
     id: "claudia",
     nome: "Claudia",
-    ruolo: "Titolare",
+    ruolo: "Titolare e onicotecnica",
     iniziali: "CL",
-    bio: "Ha aperto il salone e lavora ancora in postazione tutti i giorni. Fa un po' di tutto, ma la ricostruzione è la sua.",
-    competenze: TUTTE,
+    bio: "Ha aperto il centro e lavora ancora in postazione. La ricostruzione è la sua, ma fa un po' di tutto.",
+    sedi: ["garbatella", "montagnola"],
+    competenze: [...UNGHIE, ...ESTETICA],
     tinta: "--op-claudia",
-    foto: "/images/operatrice-claudia.webp",
+    foto: "/images/staff-claudia.webp",
+  },
+  {
+    id: "gloria",
+    nome: "Gloria",
+    ruolo: "Parrucchiera",
+    iniziali: "GL",
+    bio: "Taglio, piega e colore. È l'unica a occuparsi di capelli, e lavora solo alla Montagnola.",
+    sedi: ["montagnola"],
+    competenze: ["capelli"],
+    tinta: "--op-gloria",
+    foto: "/images/staff-gloria.webp",
+  },
+  {
+    id: "angela",
+    nome: "Angela",
+    ruolo: "Estetista",
+    iniziali: "AN",
+    bio: "Viso e trattamenti corpo. Segue anche le pelli sensibili e le clienti in gravidanza.",
+    sedi: ["montagnola"],
+    competenze: ESTETICA,
+    tinta: "--op-angela",
+    foto: "/images/staff-angela.webp",
   },
   {
     id: "martina",
     nome: "Martina",
-    ruolo: "Nail artist",
+    ruolo: "Estetista",
     iniziali: "MA",
-    bio: "Semigel e baby boomer. Se hai unghie sottili che si sfaldano, è la persona giusta.",
-    competenze: [
-      "semipermanente-mani",
-      "semipermanente-piedi",
-      "semigel",
-      "ricostruzione",
-      "manicure",
-    ],
-    tinta: "--op-martina",
-    foto: "/images/operatrice-martina.webp",
-  },
-  {
-    id: "sara",
-    nome: "Sara",
-    ruolo: "Estetista",
-    iniziali: "SA",
     bio: "Ceretta e pedicure. Ha la mano leggera, cosa che sulla ceretta si sente.",
-    competenze: ["ceretta", "pedicure", "manicure"],
-    tinta: "--op-sara",
-    foto: "/images/operatrice-sara.webp",
+    sedi: ["garbatella"],
+    competenze: ESTETICA,
+    tinta: "--op-martina",
+    foto: "/images/staff-martina.webp",
   },
   {
-    id: "giulia",
-    nome: "Giulia",
-    ruolo: "Estetista",
+    id: "giorgia",
+    nome: "Giorgia",
+    ruolo: "Onicotecnica",
     iniziali: "GI",
-    bio: "Viso, ciglia e massaggi. Segue anche i trattamenti per la pelle sensibile.",
-    competenze: ["viso", "ciglia", "massaggi"],
-    tinta: "--op-giulia",
-    foto: "/images/operatrice-giulia.webp",
+    bio: "Semigel e baby boomer. Se hai unghie sottili che si sfaldano, è la persona giusta.",
+    sedi: ["garbatella"],
+    competenze: UNGHIE,
+    tinta: "--op-giorgia",
+    foto: "/images/staff-giorgia.webp",
+  },
+  {
+    id: "letizia",
+    nome: "Letizia",
+    ruolo: "Onicotecnica",
+    iniziali: "LE",
+    bio: "French e nail art. Precisa fino all'ultimo millimetro.",
+    sedi: ["garbatella"],
+    competenze: UNGHIE,
+    tinta: "--op-letizia",
+    foto: "/images/staff-letizia.webp",
+  },
+  {
+    id: "michela",
+    nome: "Michela",
+    ruolo: "Onicotecnica",
+    iniziali: "MI",
+    bio: "Ricostruzione e refill. Veloce senza mai correre.",
+    sedi: ["montagnola"],
+    competenze: UNGHIE,
+    tinta: "--op-michela",
+    foto: "/images/staff-michela.webp",
+  },
+  {
+    id: "melania",
+    nome: "Melania",
+    ruolo: "Onicotecnica",
+    iniziali: "ME",
+    bio: "Semipermanente e cura della mano. Ti spiega sempre come farlo durare di più.",
+    sedi: ["montagnola"],
+    competenze: UNGHIE,
+    tinta: "--op-melania",
+    foto: "/images/staff-melania.webp",
   },
 ];
 
@@ -103,9 +157,23 @@ export function saFare(op: Operatrice, categoriaId: CategoriaId): boolean {
   return op.competenze.includes(categoriaId);
 }
 
-/** Chi può eseguire questa categoria di trattamento. */
-export function abilitatePer(categoriaId: CategoriaId): Operatrice[] {
-  return OPERATRICI.filter((o) => saFare(o, categoriaId));
+export function lavoraIn(op: Operatrice, sedeId: SedeId): boolean {
+  return op.sedi.includes(sedeId);
+}
+
+/**
+ * Chi può eseguire questa categoria, in questa sede.
+ *
+ * Entrambi i filtri servono: senza la sede il wizard proporrebbe alla cliente
+ * di Garbatella un'operatrice che quel giorno è alla Montagnola.
+ */
+export function abilitatePer(categoriaId: CategoriaId, sedeId: SedeId): Operatrice[] {
+  return OPERATRICI.filter((o) => saFare(o, categoriaId) && lavoraIn(o, sedeId));
+}
+
+/** Chi lavora in una sede, per le colonne del gestionale. */
+export function inSede(sedeId: SedeId): Operatrice[] {
+  return OPERATRICI.filter((o) => lavoraIn(o, sedeId));
 }
 
 /** Valore speciale del selettore: lascia scegliere al sistema. */

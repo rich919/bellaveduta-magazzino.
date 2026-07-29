@@ -4,7 +4,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Faccia } from "@/components/app/Pezzi";
 import { categoria, servizio } from "@/lib/data/services";
-import { OPERATRICI, operatrice } from "@/lib/data/staff";
+import { inSede, operatrice } from "@/lib/data/staff";
+import { SEDE_PREDEFINITA, SEDI, type SedeId } from "@/lib/data/sedi";
 import { eChiuso, GIORNI, MESI, ORARI, QUOTA_ACCONTO, SALONE } from "@/lib/data/salon";
 import { repo } from "@/lib/store";
 import type { Appuntamento } from "@/lib/store/types";
@@ -48,6 +49,8 @@ const ETICHETTA_STATO: Record<string, string> = {
 export function Cruscotto() {
   const router = useRouter();
   const [oggi] = useState(() => new Date());
+  // Le due sedi hanno agende e personale diversi: si guarda una per volta.
+  const [sedeId, setSedeId] = useState<SedeId>(SEDE_PREDEFINITA);
   const [mese, setMese] = useState(() => new Date());
   const [selezionato, setSelezionato] = useState(() => new Date());
   const [filtro, setFiltro] = useState<string | null>(null);
@@ -61,8 +64,9 @@ export function Cruscotto() {
   const ricarica = useCallback(async () => {
     setCaricamento(true);
     const [delGiorno, delMese] = await Promise.all([
-      repo().listaPerGiorno(giornoScelto),
+      repo().listaPerGiorno(sedeId, giornoScelto),
       repo().listaPerIntervallo(
+        sedeId,
         chiaveGiorno(new Date(mese.getFullYear(), mese.getMonth(), 1)),
         chiaveGiorno(
           new Date(mese.getFullYear(), mese.getMonth(), giorniNelMese(mese.getFullYear(), mese.getMonth())),
@@ -77,7 +81,7 @@ export function Cruscotto() {
     }
     setDensita(conteggio);
     setCaricamento(false);
-  }, [giornoScelto, mese]);
+  }, [giornoScelto, mese, sedeId]);
 
   useEffect(() => {
     void ricarica();
@@ -95,11 +99,14 @@ export function Cruscotto() {
     [appuntamenti],
   );
 
+  /** Chi lavora nella sede aperta: sono le colonne della griglia. */
+  const personale = useMemo(() => inSede(sedeId), [sedeId]);
+
   const kpi = useMemo(() => {
     const incassato = attivi.reduce((n, a) => n + a.incassato, 0);
     const atteso = attivi.reduce((n, a) => n + a.prezzo, 0);
     const minuti = attivi.reduce((n, a) => n + a.durata, 0);
-    const capienza = OPERATRICI.length * (CHIUDE - APRE);
+    const capienza = personale.length * (CHIUDE - APRE);
     const perCategoria: Record<string, number> = {};
     for (const a of attivi) {
       const s = servizio(a.servizioId);
@@ -114,9 +121,9 @@ export function Cruscotto() {
       occupazione: capienza > 0 ? Math.round((minuti / capienza) * 100) : 0,
       top: top ? { nome: categoria(top[0] as never)?.etichetta ?? "—", quanti: top[1] } : null,
     };
-  }, [attivi]);
+  }, [attivi, personale]);
 
-  const colonne = filtro ? OPERATRICI.filter((o) => o.id === filtro) : OPERATRICI;
+  const colonne = filtro ? personale.filter((o) => o.id === filtro) : personale;
   const ore = (CHIUDE - APRE) / 60;
   const chiuso = eChiuso(selezionato);
 
@@ -138,6 +145,23 @@ export function Cruscotto() {
         <div className="adm-bar-in">
           <span className="marchio">{SALONE.nome}</span>
           <span className="adm-tag">Gestionale</span>
+          <div className="sede-switch" role="group" aria-label="Sede">
+            {SEDI.map((x) => (
+              <button
+                key={x.id}
+                type="button"
+                aria-pressed={sedeId === x.id}
+                onClick={() => {
+                  setSedeId(x.id);
+                  // Il filtro punta a una persona che nell'altra sede può non
+                  // esserci: azzerarlo evita una griglia vuota inspiegabile.
+                  setFiltro(null);
+                }}
+              >
+                {x.etichetta}
+              </button>
+            ))}
+          </div>
           <div className="adm-who">
             <span>{dataEstesa(oggi)}</span>
             <button type="button" className="btn btn-2" style={{ padding: "0.35rem 0.9rem", fontSize: "0.7rem" }} onClick={esci}>
@@ -153,7 +177,7 @@ export function Cruscotto() {
             ["Appuntamenti", String(kpi.quanti), `${GIORNI[selezionato.getDay()]} ${selezionato.getDate()}`, ""],
             ["Già incassato", euro(kpi.incassato), "acconti e saldi online", "pos"],
             ["Da incassare", euro(kpi.daIncassare), "alla cassa in salone", "att"],
-            ["Occupazione", `${kpi.occupazione}%`, `su ${OPERATRICI.length} operatrici`, ""],
+            ["Occupazione", `${kpi.occupazione}%`, `su ${personale.length} in sede`, ""],
             [
               "Più richiesto",
               kpi.top ? kpi.top.nome : "—",
@@ -237,7 +261,7 @@ export function Cruscotto() {
                 Tutte le operatrici
                 <span className="n num">{attivi.length}</span>
               </button>
-              {OPERATRICI.map((o) => (
+              {personale.map((o) => (
                 <button
                   key={o.id}
                   type="button"

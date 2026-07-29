@@ -21,6 +21,7 @@ import {
   type ReactNode,
 } from "react";
 import { prodotto } from "@/lib/data/products";
+import { SEDE_PREDEFINITA, type SedeId } from "@/lib/data/sedi";
 import { puntiPerSpesa } from "@/lib/membership";
 
 export type VoceCarrello = { prodottoId: string; quantita: number };
@@ -35,6 +36,8 @@ export type MiaPrenotazione = {
 };
 
 type Stato = {
+  /** La sede scelta dalla cliente: si decide una volta e resta. */
+  sedeId: SedeId;
   carrello: VoceCarrello[];
   punti: number;
   prenotazioni: MiaPrenotazione[];
@@ -43,6 +46,7 @@ type Stato = {
 };
 
 type Azioni = {
+  scegliSede: (sedeId: SedeId) => void;
   aggiungiAlCarrello: (prodottoId: string) => void;
   cambiaQuantita: (prodottoId: string, delta: number) => void;
   svuotaCarrello: () => void;
@@ -52,12 +56,13 @@ type Azioni = {
   totaleCarrello: number;
 };
 
-const CHIAVE = "claudia-nails:cliente:v1";
+const CHIAVE = "claudia-nails:cliente:v2";
 
 /** Punti di partenza della cliente dimostrativa, per non mostrare una tessera vuota. */
 const PUNTI_INIZIALI = 340;
 
 const INIZIALE: Stato = {
+  sedeId: SEDE_PREDEFINITA,
   carrello: [],
   punti: PUNTI_INIZIALI,
   prenotazioni: [],
@@ -77,6 +82,7 @@ export function ProviderStatoApp({ children }: { children: ReactNode }) {
       if (grezzo) {
         const dati = JSON.parse(grezzo) as Partial<Stato>;
         setStato({
+          sedeId: dati.sedeId ?? SEDE_PREDEFINITA,
           carrello: Array.isArray(dati.carrello) ? dati.carrello : [],
           punti: typeof dati.punti === "number" ? dati.punti : PUNTI_INIZIALI,
           prenotazioni: Array.isArray(dati.prenotazioni) ? dati.prenotazioni : [],
@@ -97,6 +103,7 @@ export function ProviderStatoApp({ children }: { children: ReactNode }) {
       window.localStorage.setItem(
         CHIAVE,
         JSON.stringify({
+          sedeId: stato.sedeId,
           carrello: stato.carrello,
           punti: stato.punti,
           prenotazioni: stato.prenotazioni,
@@ -106,6 +113,10 @@ export function ProviderStatoApp({ children }: { children: ReactNode }) {
       // Storage pieno o negato: la sessione corrente funziona lo stesso.
     }
   }, [stato]);
+
+  const scegliSede = useCallback((sedeId: SedeId) => {
+    setStato((s) => ({ ...s, sedeId }));
+  }, []);
 
   const aggiungiAlCarrello = useCallback((prodottoId: string) => {
     setStato((s) => {
@@ -170,6 +181,7 @@ export function ProviderStatoApp({ children }: { children: ReactNode }) {
   const valore = useMemo(
     () => ({
       ...stato,
+      scegliSede,
       aggiungiAlCarrello,
       cambiaQuantita,
       svuotaCarrello,
@@ -180,6 +192,7 @@ export function ProviderStatoApp({ children }: { children: ReactNode }) {
     }),
     [
       stato,
+      scegliSede,
       aggiungiAlCarrello,
       cambiaQuantita,
       svuotaCarrello,

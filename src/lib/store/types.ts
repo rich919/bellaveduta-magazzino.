@@ -25,6 +25,8 @@ export type StatoPagamento =
 
 export type Appuntamento = {
   id: string;
+  /** In quale delle due sedi. Le agende sono separate. */
+  sedeId: string;
   /** Giorno in formato YYYY-MM-DD, ora locale. */
   giorno: string;
   /** Minuti dalla mezzanotte. */
@@ -54,11 +56,12 @@ export type NuovoAppuntamento = Omit<Appuntamento, "id" | "creatoIl">;
 export interface AppointmentsRepo {
   /** Estremi inclusi, entrambi in formato YYYY-MM-DD. */
   listaPerIntervallo(
+    sedeId: string,
     da: string,
     a: string,
     operatriceId?: string,
   ): Promise<Appuntamento[]>;
-  listaPerGiorno(giorno: string): Promise<Appuntamento[]>;
+  listaPerGiorno(sedeId: string, giorno: string): Promise<Appuntamento[]>;
   crea(dati: NuovoAppuntamento): Promise<Appuntamento>;
   aggiorna(
     id: string,

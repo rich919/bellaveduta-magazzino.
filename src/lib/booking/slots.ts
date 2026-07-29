@@ -26,6 +26,7 @@ import {
   operatrice,
   type Operatrice,
 } from "../data/staff";
+import { sedeOffre, type SedeId } from "../data/sedi";
 import type { Appuntamento } from "../store/types";
 import { chiaveGiorno, minutiDelGiorno } from "../date";
 
@@ -69,6 +70,8 @@ export function operatriceLibera(
 export type OpzioniSlot = {
   data: Date;
   servizioId: string;
+  /** In quale sede si vuole prenotare. */
+  sedeId: SedeId;
   /** Id di un'operatrice, oppure NESSUNA_PREFERENZA. */
   operatriceId: string;
   /** Gli appuntamenti già presenti in quel giorno. */
@@ -84,6 +87,7 @@ export type OpzioniSlot = {
 export function slotLiberi({
   data,
   servizioId,
+  sedeId,
   operatriceId,
   appuntamenti,
   adesso = new Date(),
@@ -94,7 +98,10 @@ export function slotLiberi({
   const srv = servizio(servizioId);
   if (!srv) return [];
 
-  const candidate = candidateFor(srv, operatriceId);
+  // Il parrucchiere esiste solo alla Montagnola: qui non si prenota.
+  if (!sedeOffre(sedeId, srv.categoria)) return [];
+
+  const candidate = candidateFor(srv, sedeId, operatriceId);
   if (candidate.length === 0) return [];
 
   // Se stiamo guardando oggi, gli orari già passati non sono prenotabili.
@@ -147,8 +154,12 @@ function perCaricoCrescente(
  * Chi può prendere in carico questo servizio, nell'ordine in cui va tentata
  * l'assegnazione automatica.
  */
-function candidateFor(srv: Servizio, operatriceId: string): Operatrice[] {
-  const abilitate = abilitatePer(srv.categoria);
+function candidateFor(
+  srv: Servizio,
+  sedeId: SedeId,
+  operatriceId: string,
+): Operatrice[] {
+  const abilitate = abilitatePer(srv.categoria, sedeId);
   if (operatriceId === NESSUNA_PREFERENZA) return abilitate;
   const scelta = operatrice(operatriceId);
   // Una scelta esplicita vale solo se quella persona sa fare il trattamento.

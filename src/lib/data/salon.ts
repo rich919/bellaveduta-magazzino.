@@ -8,7 +8,10 @@
 export const SALONE = {
   nome: "Claudia Nails",
   insegna: "Claudia Nails Garbatella",
-  claim: "Centro estetico per la bellezza e il benessere",
+  // Sono le parole del salone, prese da claudianails.it.
+  claim: "Crea il tuo stile! Con noi puoi.",
+  manifesto:
+    "Non è solo un centro nails, ma uno spazio dedicato e condiviso da tutte le donne.",
   indirizzo: "Via Nicolò da Pistoia, 38",
   cap: "00154",
   citta: "Roma",

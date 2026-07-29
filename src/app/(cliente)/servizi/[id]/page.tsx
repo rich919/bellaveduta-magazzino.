@@ -6,6 +6,7 @@ import { Faccia, Foto, fotoCategoria } from "@/components/app/Pezzi";
 import { BottoneAggiungi } from "@/components/app/BottoneAggiungi";
 import { categoria, servizio, SERVIZI } from "@/lib/data/services";
 import { abilitatePer } from "@/lib/data/staff";
+import { sediPerCategoria } from "@/lib/data/sedi";
 import { correlatiPerCategoria } from "@/lib/data/products";
 import { euro } from "@/lib/date";
 import { COSA_COMPRENDE } from "@/lib/data/incluso";
@@ -33,7 +34,15 @@ export default async function PaginaServizio({ params }: Props) {
 
   const cat = categoria(s.categoria);
   const incluso = COSA_COMPRENDE[s.categoria] ?? [];
-  const chi = abilitatePer(s.categoria);
+  const sediDisponibili = sediPerCategoria(s.categoria);
+  // Chi lo esegue, senza duplicati fra le due sedi.
+  const chi = [
+    ...new Map(
+      sediDisponibili
+        .flatMap((x) => abilitatePer(s.categoria, x.id))
+        .map((o) => [o.id, o]),
+    ).values(),
+  ];
   const correlati = correlatiPerCategoria(s.categoria);
 
   return (
@@ -89,6 +98,22 @@ export default async function PaginaServizio({ params }: Props) {
             </div>
           </>
         )}
+
+        <div className="sez-cap">
+          <h2 className="sez-tit">Dove si prenota</h2>
+        </div>
+        <div className="chi">
+          {sediDisponibili.map((x) => (
+            <span key={x.id} className="chi-op chi-sede">
+              {x.etichetta}
+            </span>
+          ))}
+          {sediDisponibili.length === 1 && (
+            <span className="tag-demo" style={{ alignSelf: "center" }}>
+              solo in questa sede
+            </span>
+          )}
+        </div>
 
         <div className="sez-cap">
           <h2 className="sez-tit">Chi te lo fa</h2>

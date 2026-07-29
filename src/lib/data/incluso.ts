@@ -85,4 +85,10 @@ export const COSA_COMPRENDE: Readonly<Record<CategoriaId, readonly string[]>> = 
     "Massaggio mirato",
     "Rilassamento finale",
   ],
+  capelli: [
+    "Consulenza sul taglio",
+    "Lavaggio con massaggio",
+    "Taglio o colore",
+    "Piega finale",
+  ],
 };

@@ -37,11 +37,16 @@
   --cat-viso: #b08b3c;
   --cat-ciglia: #6a5d8c;
   --cat-massaggi: #47786a;
+  --cat-capelli: #7a5a86;
 
   --op-claudia: #ae6b77;
-  --op-martina: #b4515f;
-  --op-sara: #5f7f93;
-  --op-giulia: #6a5d8c;
+  --op-gloria: #7a5a86;
+  --op-angela: #47786a;
+  --op-martina: #6e8a6a;
+  --op-giorgia: #b4515f;
+  --op-letizia: #c4744c;
+  --op-michela: #9a6b4a;
+  --op-melania: #5f7f93;
 
   --script: "Snell Roundhand", "Apple Chancery", "Segoe Script",
     "Brush Script MT", Georgia, cursive;
@@ -85,10 +90,15 @@
     --cat-viso: #dcb662;
     --cat-ciglia: #9a8cbe;
     --cat-massaggi: #74ac9b;
+    --cat-capelli: #b094c0;
     --op-claudia: #dfa0ab;
-    --op-martina: #e8808e;
-    --op-sara: #8fb0c4;
-    --op-giulia: #9a8cbe;
+    --op-gloria: #b094c0;
+    --op-angela: #74ac9b;
+    --op-martina: #9bb897;
+    --op-giorgia: #e8808e;
+    --op-letizia: #e29a70;
+    --op-michela: #c79a76;
+    --op-melania: #8fb0c4;
   }
 }
 
@@ -932,3 +942,43 @@ button {
   border: 1px solid var(--bordo); border-radius: 10px; background: var(--crema);
   color: var(--inchiostro); }
 .accesso-box .btn { margin-top: 0.8rem; }
+
+/* ═══════════ SEDI ═══════════ */
+.sede-scelta { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+.sede-card { display: flex; flex-direction: column; gap: 0.1rem; text-align: left;
+  background: var(--card); border: 1px solid var(--bordo); border-radius: 14px;
+  padding: 0.7rem 0.8rem; cursor: pointer; transition: all 0.2s var(--ease); }
+.sede-card b { font-family: var(--serif); font-size: 1rem; font-weight: 400; }
+.sede-card small { font-size: 0.68rem; color: var(--testo-2); line-height: 1.25; }
+.sede-card em { font-style: normal; font-size: 0.6rem; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--oro); margin-top: 0.25rem; }
+.sede-card[aria-pressed="true"] { border-color: var(--rosa); background: var(--rosa-tenue); }
+.sede-card[aria-pressed="true"] small { color: var(--rosa-scuro); }
+
+.sede-switch { display: flex; background: var(--crema-2); border-radius: var(--r-pill);
+  padding: 3px; gap: 2px; }
+.sede-switch button { border: 0; background: none; color: var(--testo); font-size: 0.75rem;
+  font-weight: 600; padding: 0.32rem 0.85rem; border-radius: var(--r-pill); cursor: pointer;
+  transition: all 0.2s var(--ease); white-space: nowrap; }
+.sede-switch button[aria-pressed="true"] { background: var(--rosa); color: var(--su-rosa); }
+.chi-sede { padding: 0.28rem 0.8rem; font-weight: 600; }
+
+/* ═══════════ STAFF ═══════════ */
+.staff-card { flex: none; width: 116px; background: var(--card); border-radius: 14px;
+  box-shadow: var(--ombra); overflow: hidden; }
+.staff-foto { aspect-ratio: 3 / 4; }
+.staff-b { padding: 0.45rem 0.55rem 0.6rem; }
+.staff-b b { display: block; font-family: var(--serif); font-size: 0.9rem; font-weight: 400; }
+.staff-b small { font-size: 0.62rem; color: var(--testo-2); line-height: 1.2; display: block; }
+
+.staff-riga { display: flex; gap: 0.8rem; padding: 0.7rem; margin-bottom: 0.6rem;
+  align-items: flex-start; }
+.staff-riga-foto { width: 84px; aspect-ratio: 3 / 4; border-radius: 12px; flex: none; }
+.staff-riga h3 { font-size: 1.06rem; }
+.staff-ruolo { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--rosa); font-weight: 700; margin-top: 0.1rem; }
+.staff-bio { font-size: 0.78rem; color: var(--testo); margin-top: 0.35rem; line-height: 1.35; }
+.staff-tag { display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.45rem; }
+.staff-tag span { font-size: 0.6rem; border: 1px solid var(--bordo); color: var(--testo-2);
+  border-radius: var(--r-pill); padding: 0.1rem 0.45rem; }
+.staff-doppia { font-size: 0.66rem; color: var(--oro); margin-top: 0.4rem; }

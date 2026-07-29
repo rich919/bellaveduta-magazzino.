@@ -4,6 +4,9 @@ import { Foto, fotoCategoria } from "@/components/app/Pezzi";
 import { CardTessera } from "@/components/app/CardTessera";
 import { ProssimoAppuntamento } from "@/components/app/ProssimoAppuntamento";
 import { MappaSalone } from "@/components/app/MappaSalone";
+import { SelettoreSede } from "@/components/app/SelettoreSede";
+import { Foto as FotoStaff } from "@/components/app/Pezzi";
+import { OPERATRICI } from "@/lib/data/staff";
 import { CATEGORIE, SERVIZI } from "@/lib/data/services";
 import { RECENSIONI, SALONE } from "@/lib/data/salon";
 import { euro, numero } from "@/lib/date";
@@ -39,8 +42,8 @@ export default function Home() {
 
       <div className="hero">
         <div className="hero-testo">
-          <p className="hero-claim">Il tuo angolo di cura</p>
-          <p className="hero-sub">alla {SALONE.quartiere}, dal 2014</p>
+          <p className="hero-claim">{SALONE.claim}</p>
+          <p className="hero-sub">{SALONE.manifesto}</p>
           <p className="hero-voto">
             <span className="stelle">★</span> {numero(SALONE.valutazione)} —{" "}
             {numero(SALONE.recensioni)} recensioni
@@ -52,6 +55,13 @@ export default function Home() {
           className="hero-foto"
           priorita
         />
+      </div>
+
+      <div className="sez-cap pad">
+        <h2 className="sez-tit">Dove vuoi venire</h2>
+      </div>
+      <div className="pad">
+        <SelettoreSede />
       </div>
 
       <div className="hero-azioni">
@@ -98,6 +108,24 @@ export default function Home() {
                 <span className="amata-p num">{euro(s.prezzo)}</span>
                 <span className="amata-btn">Prenota</span>
               </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+
+      <div className="sez-cap pad">
+        <h2 className="sez-tit">Chi siamo</h2>
+        <Link href="/staff" className="piu">
+          Tutte ›
+        </Link>
+      </div>
+      <div className="carosello">
+        {OPERATRICI.map((o) => (
+          <Link key={o.id} href="/staff" className="staff-card">
+            <FotoStaff src={o.foto} alt={o.nome} className="staff-foto" sizes="120px" />
+            <div className="staff-b">
+              <b>{o.nome}</b>
+              <small>{o.ruolo}</small>
             </div>
           </Link>
         ))}
