@@ -1,20 +1,30 @@
 {
-  "name": "magazzino-bellaveduta",
-  "version": "1.0.0",
+  "name": "claudia-nails",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "eslint",
+    "test": "tsx --test \"src/**/*.test.ts\"",
+    "immagini": "node scripts/generate-images.mjs"
   },
   "dependencies": {
-    "next": "14.1.0",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "@supabase/supabase-js": "^2.39.6",
-    "tailwindcss": "^3.4.0"
+    "next": "15.5.22",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
   },
   "devDependencies": {
-    "postcss": "^8.4.21",
-    "autoprefixer": "^10.4.14"
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.22",
+    "tailwindcss": "^4",
+    "tsx": "^4.23.1",
+    "typescript": "^5"
   }
 }
