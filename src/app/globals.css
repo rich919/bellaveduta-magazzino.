@@ -221,6 +221,10 @@ button {
     border: 0;
     border-radius: 0;
     box-shadow: none;
+    /* Va tolto: `overflow: hidden` rende .telefono il contenitore di
+       riferimento per position:sticky, e siccome non scorre mai la tab bar
+       non si aggancia e resta in fondo alla pagina, invisibile. */
+    overflow: visible;
   }
   .notch,
   .statusbar {
@@ -228,6 +232,17 @@ button {
   }
   .schermo {
     overflow: visible;
+    /* Spazio per la tab bar fissa, altrimenti copre l'ultima riga. */
+    padding-bottom: calc(66px + env(safe-area-inset-bottom));
+  }
+  /* Fissa e non appiccicata: così è visibile appena si apre la pagina e resta
+     ferma durante tutto lo scorrimento, come in un'app vera. */
+  .tabbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
   }
 }
 
@@ -1038,3 +1053,17 @@ button {
 .chi-testo p { font-size: 0.86rem; color: var(--testo); line-height: 1.6; margin-top: 0.9rem; }
 .chi-firma { font-family: var(--script); font-style: italic; font-size: 1.25rem;
   color: var(--rosa) !important; margin-top: 1.2rem !important; text-align: center; }
+
+/* ═══════════ RIGA CON PRENOTA ═══════════ */
+/* La riga diventa un contenitore: dentro, l'area che porta alla scheda e il
+   bottone che porta dritto alla prenotazione. */
+.riga-tocco { flex: 1; min-width: 0; display: flex; gap: 0.75rem; align-items: center;
+  color: inherit; }
+/* Compatta e centrata: stirandola per tutta l'altezza della riga diventava
+   l'elemento più pesante della lista, più del nome del trattamento. */
+.riga-prenota { flex: none; align-self: center; display: grid; place-items: center;
+  padding: 0.5rem 0.8rem; border-radius: var(--r-pill); background: var(--rosa-tenue);
+  color: var(--rosa-scuro); font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 0.07em; text-transform: uppercase; white-space: nowrap;
+  transition: background 0.2s var(--ease), color 0.2s var(--ease); }
+.riga-prenota:hover { background: var(--rosa); color: var(--su-rosa); }

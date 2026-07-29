@@ -54,6 +54,7 @@ export function RigaServizio({
 
   const contenuto = (
     <>
+
       <Foto
         src={fotoCategoria(servizio.categoria)}
         alt=""
@@ -75,6 +76,8 @@ export function RigaServizio({
     </>
   );
 
+  // Nella schermata di prenotazione la riga È già la selezione: un secondo
+  // bottone "Prenota" accanto sarebbe la stessa azione due volte.
   if (onScegli) {
     return (
       <button type="button" className="riga" onClick={() => onScegli(servizio.id)}>
@@ -83,10 +86,22 @@ export function RigaServizio({
     );
   }
 
+  // Due collegamenti affiancati, non annidati: leggere la scheda e prenotare
+  // subito sono due intenzioni diverse, e chi ha già deciso non deve passare
+  // dal dettaglio.
   return (
-    <Link href={`/servizi/${servizio.id}`} className="riga">
-      {contenuto}
-    </Link>
+    <div className="riga">
+      <Link href={`/servizi/${servizio.id}`} className="riga-tocco">
+        {contenuto}
+      </Link>
+      <Link
+        href={`/prenota?servizio=${servizio.id}`}
+        className="riga-prenota"
+        aria-label={`Prenota ${servizio.nome}`}
+      >
+        Prenota
+      </Link>
+    </div>
   );
 }
 
