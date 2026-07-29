@@ -57,6 +57,17 @@ export default function Home() {
         />
       </div>
 
+      <section className="promessa">
+        <span className="promessa-sigillo" aria-hidden="true">
+          <Icona nome="foglia" />
+        </span>
+        <h2>100% Originale &amp; Organico</h2>
+        <p>
+          Siamo orgogliosi di utilizzare solo prodotti 100% originali e organici
+          per i nostri servizi di bellezza.
+        </p>
+      </section>
+
       <div className="sez-cap pad">
         <h2 className="sez-tit">Dove vuoi venire</h2>
       </div>
@@ -114,7 +125,7 @@ export default function Home() {
       </div>
 
       <div className="sez-cap pad">
-        <h2 className="sez-tit">Chi siamo</h2>
+        <h2 className="sez-tit">Chi ti segue</h2>
         <Link href="/staff" className="piu">
           Tutte ›
         </Link>

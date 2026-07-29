@@ -22,11 +22,10 @@ export function PiedePagina() {
       <section className="piede-sez">
         <h2>Chi siamo</h2>
         <p>{SALONE.manifesto}</p>
-        <p style={{ marginTop: "0.5rem" }}>
-          Una catena di bellezza romana con due sedi, che offre servizi per la
-          cura del corpo e dei capelli: manicure e pedicure, trattamenti viso,
-          massaggi, ceretta e, alla Montagnola, anche il parrucchiere.
-        </p>
+        <Link href="/chi-siamo" className="piede-link">
+          La nostra storia ›
+        </Link>
+        <br />
         <Link href="/staff" className="piede-link">
           Conosci lo staff ›
         </Link>

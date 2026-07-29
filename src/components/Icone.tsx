@@ -27,6 +27,7 @@ export type NomeIcona =
   | "ciglia"
   | "massaggi"
   | "capelli"
+  | "foglia"
   | "lente"
   | "campana"
   | "indietro"
@@ -52,6 +53,8 @@ const TRACCIATI: Record<NomeIcona, string> = {
     '<path d="M4 16c3-4 6-4 8 0M4 16c-1 2 0 4 2 4h12c2 0 3-2 2-4"/><circle cx="12" cy="7" r="3"/>',
   capelli:
     '<circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M7.7 16.2 18 4M16.3 16.2 6 4"/>',
+  foglia:
+    '<path d="M20 4C10 4 5 8.5 5 14.5a5.5 5.5 0 0 0 5.5 5.5C17 20 20 13 20 4z"/><path d="M5.5 19.5C8 15 12 11.5 17 9.5"/>',
   lente: '<circle cx="11" cy="11" r="6"/><path d="m20 20-4.5-4.5"/>',
   campana: '<path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6z"/><path d="M10 19a2 2 0 0 0 4 0"/>',
   indietro: '<path d="m15 5-7 7 7 7"/>',

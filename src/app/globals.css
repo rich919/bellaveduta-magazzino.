@@ -1012,3 +1012,29 @@ button {
 .piede-legale { margin-top: 1.6rem; padding-top: 1rem; border-top: 1px solid var(--bordo); }
 .piede-legale p { font-size: 0.7rem; color: var(--testo-2); line-height: 1.5; }
 .piede-demo { margin-top: 0.5rem; font-style: italic; }
+
+/* ═══════════ PROMESSA IN HOME ═══════════ */
+.promessa { margin: 1.4rem 1.1rem 0; padding: 1.5rem 1.2rem 1.4rem; text-align: center;
+  border-radius: var(--r-card); background: var(--card); box-shadow: var(--ombra);
+  position: relative; overflow: hidden; }
+/* Filetto d'oro in alto: firma il blocco senza aggiungere rumore. */
+.promessa::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--oro) 30%, var(--oro) 70%, transparent); }
+.promessa-sigillo { width: 46px; height: 46px; border-radius: 999px; margin: 0 auto 0.8rem;
+  display: grid; place-items: center; color: var(--oro);
+  border: 1px solid color-mix(in oklab, var(--oro) 45%, transparent);
+  background: color-mix(in oklab, var(--oro) 9%, transparent); }
+.promessa-sigillo svg { width: 22px; height: 22px; }
+.promessa h2 { font-family: var(--serif); font-size: 1.16rem; letter-spacing: 0.01em; }
+.promessa p { font-size: 0.8rem; color: var(--testo); line-height: 1.5; margin-top: 0.5rem;
+  max-width: 30ch; margin-inline: auto; }
+
+/* ═══════════ CHI SIAMO ═══════════ */
+.chi-foto { aspect-ratio: 3 / 2; border-radius: var(--r-card); box-shadow: var(--ombra); }
+.chi-testo { padding: 1.4rem 1.1rem 0; }
+.chi-testo h1 { font-family: var(--serif); font-size: 1.8rem; color: var(--rosa); }
+.chi-apertura { font-size: 0.98rem; color: var(--inchiostro); line-height: 1.55;
+  margin-top: 0.9rem; }
+.chi-testo p { font-size: 0.86rem; color: var(--testo); line-height: 1.6; margin-top: 0.9rem; }
+.chi-firma { font-family: var(--script); font-style: italic; font-size: 1.25rem;
+  color: var(--rosa) !important; margin-top: 1.2rem !important; text-align: center; }
