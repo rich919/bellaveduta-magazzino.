@@ -6,7 +6,7 @@ import { Faccia } from "@/components/app/Pezzi";
 import { categoria, servizio } from "@/lib/data/services";
 import { inSede, operatrice } from "@/lib/data/staff";
 import { SEDE_PREDEFINITA, SEDI, type SedeId } from "@/lib/data/sedi";
-import { eChiuso, GIORNI, MESI, ORARI, QUOTA_ACCONTO, SALONE } from "@/lib/data/salon";
+import { eChiuso, GIORNI, MESI, ORARI, SALONE } from "@/lib/data/salon";
 import { repo } from "@/lib/store";
 import type { Appuntamento } from "@/lib/store/types";
 import {
@@ -452,7 +452,6 @@ function DettaglioAppuntamento({
   const cat = s ? categoria(s.categoria) : null;
   const op = operatrice(a.operatriceId);
   const [pag, classe] = ETICHETTA_PAGAMENTO[a.pagamento] ?? ["—", "salone"];
-  const acconto = Math.round(a.prezzo * QUOTA_ACCONTO);
 
   return (
     <>
@@ -486,10 +485,10 @@ function DettaglioAppuntamento({
             <span className={`pillola ${classe}`}>{pag}</span>
           </b>
         </div>
-        {a.pagamento === "acconto-versato" && (
+        {a.incassato > 0 && a.incassato < a.prezzo && (
           <div className="dr">
             <span>Da incassare</span>
-            <b className="num">{euro(a.prezzo - acconto)}</b>
+            <b className="num">{euro(a.prezzo - a.incassato)}</b>
           </div>
         )}
         <div className="dr">

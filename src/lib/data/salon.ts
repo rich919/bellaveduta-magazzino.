@@ -19,6 +19,8 @@ export const SALONE = {
   telefono: "06 5160 3735",
   telefonoTel: "+390651603735",
   email: "info@claudianails.it",
+  // Dal piede di claudianails.it.
+  partitaIva: "14703171000",
   sito: "https://www.claudianails.it",
   treatwell: "https://www.treatwell.it/salone/claudia-nails-roma-garbatella/",
   mappa: "https://maps.app.goo.gl/UxD23CwRr3DrTCrbA",
@@ -53,9 +55,6 @@ export const ORARI: Readonly<Record<number, FasciaOraria | null>> = {
 
 /** Passo della griglia di prenotazione, in minuti. */
 export const PASSO_SLOT = 15;
-
-/** Percentuale trattenuta come acconto quando la cliente sceglie di versarlo. */
-export const QUOTA_ACCONTO = 0.3;
 
 export const GIORNI = [
   "Domenica",

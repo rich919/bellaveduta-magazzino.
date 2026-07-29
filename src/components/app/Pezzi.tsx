@@ -34,11 +34,26 @@ export function Foto({
   );
 }
 
-/** Riga di listino: miniatura, nome, durata, prezzo. */
-export function RigaServizio({ servizio }: { servizio: Servizio }) {
+/**
+ * Riga di listino: miniatura, nome, durata, prezzo.
+ *
+ * Con `onScegli` diventa un bottone invece di un collegamento. Serve nella
+ * schermata di prenotazione, dove toccare la riga deve selezionare il
+ * trattamento e non portare alla sua scheda. Annidare un link dentro un
+ * bottone non è una scorciatoia possibile: è HTML non valido e il link vince,
+ * quindi il tocco navigherebbe via invece di scegliere.
+ */
+export function RigaServizio({
+  servizio,
+  onScegli,
+}: {
+  servizio: Servizio;
+  onScegli?: (id: string) => void;
+}) {
   const cat = categoria(servizio.categoria);
-  return (
-    <Link href={`/servizi/${servizio.id}`} className="riga">
+
+  const contenuto = (
+    <>
       <Foto
         src={fotoCategoria(servizio.categoria)}
         alt=""
@@ -57,6 +72,20 @@ export function RigaServizio({ servizio }: { servizio: Servizio }) {
           <span className="val num">{euro(servizio.prezzo)}</span>
         </div>
       </div>
+    </>
+  );
+
+  if (onScegli) {
+    return (
+      <button type="button" className="riga" onClick={() => onScegli(servizio.id)}>
+        {contenuto}
+      </button>
+    );
+  }
+
+  return (
+    <Link href={`/servizi/${servizio.id}`} className="riga">
+      {contenuto}
     </Link>
   );
 }

@@ -14,8 +14,6 @@
 export type ModalitaPagamento =
   /** Nessun addebito ora, si paga alla cassa. */
   | "in-salone"
-  /** Acconto del 30% adesso, resto in salone. */
-  | "acconto"
   /** Intero importo adesso. */
   | "saldo";
 
@@ -52,12 +50,6 @@ export interface PaymentProvider {
 }
 
 /** Quanto va incassato adesso, dato il totale e la modalità scelta. */
-export function importoDovuto(
-  totale: number,
-  modalita: ModalitaPagamento,
-  quotaAcconto: number,
-): number {
-  if (modalita === "in-salone") return 0;
-  if (modalita === "saldo") return totale;
-  return Math.round(totale * quotaAcconto);
+export function importoDovuto(totale: number, modalita: ModalitaPagamento): number {
+  return modalita === "in-salone" ? 0 : totale;
 }

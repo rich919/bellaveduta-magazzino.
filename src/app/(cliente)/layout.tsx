@@ -1,5 +1,6 @@
 import { ProviderStatoApp } from "@/components/StatoApp";
 import { TabBar } from "@/components/app/TabBar";
+import { PiedePagina } from "@/components/app/PiedePagina";
 
 /**
  * Guscio dell'app cliente.
@@ -21,7 +22,10 @@ export default function LayoutCliente({
             <span className="num">9:41</span>
             <span>▮▮▮ ᯤ ▰</span>
           </div>
-          <div className="schermo">{children}</div>
+          <div className="schermo">
+            {children}
+            <PiedePagina />
+          </div>
           <TabBar />
         </div>
       </div>

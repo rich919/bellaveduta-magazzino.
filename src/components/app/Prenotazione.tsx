@@ -13,7 +13,7 @@ import {
   NESSUNA_PREFERENZA,
   operatrice,
 } from "@/lib/data/staff";
-import { eChiuso, GIORNI, MESI, QUOTA_ACCONTO } from "@/lib/data/salon";
+import { eChiuso, GIORNI, MESI } from "@/lib/data/salon";
 import { sede, sediPerCategoria } from "@/lib/data/sedi";
 import { raggruppaPerFascia, slotLiberi, type Slot } from "@/lib/booking/slots";
 import { repo } from "@/lib/store";
@@ -84,7 +84,7 @@ export function Prenotazione() {
     setErrore(null);
     setFase("pagamento");
 
-    const importo = importoDovuto(srv.prezzo, modalita, QUOTA_ACCONTO);
+    const importo = importoDovuto(srv.prezzo, modalita);
 
     try {
       const sessione = await provider().creaCheckout({
@@ -136,12 +136,7 @@ export function Prenotazione() {
         telefono: "340 1234567",
         note: "Prenotato dall'app.",
         stato: "confermato",
-        pagamento:
-          modalita === "in-salone"
-            ? "in-salone"
-            : modalita === "acconto"
-              ? "acconto-versato"
-              : "saldato",
+        pagamento: modalita === "in-salone" ? "in-salone" : "saldato",
         incassato: importo,
         daOnline: true,
       });
@@ -178,14 +173,7 @@ export function Prenotazione() {
           {SERVIZI.filter((s) => s.verificato)
             .slice(0, 8)
             .map((s) => (
-              <button
-                key={s.id}
-                type="button"
-                onClick={() => setServizioId(s.id)}
-                style={{ display: "block", width: "100%", border: 0, background: "none", padding: 0, textAlign: "left" }}
-              >
-                <RigaServizio servizio={s} />
-              </button>
+              <RigaServizio key={s.id} servizio={s} onScegli={setServizioId} />
             ))}
           <Link href="/servizi" className="btn btn-2 btn-lg" style={{ marginTop: "0.4rem" }}>
             Vedi tutti i trattamenti
@@ -199,7 +187,6 @@ export function Prenotazione() {
   /* ── Confermato ───────────────────────────────────────────────── */
   if (fase === "fatto" && giorno && slotScelto) {
     const op = operatrice(slotScelto.operatriceId);
-    const acconto = Math.round(srv.prezzo * QUOTA_ACCONTO);
     return (
       <>
         <div className="app-head">
@@ -248,11 +235,7 @@ export function Prenotazione() {
             <div>
               <span>Pagamento</span>
               <b>
-                {modalita === "in-salone"
-                  ? "In salone"
-                  : modalita === "acconto"
-                    ? `Acconto ${euro(acconto)} versato`
-                    : "Saldato online"}
+                {modalita === "in-salone" ? "In salone" : "Saldato online"}
               </b>
             </div>
             <div>
@@ -272,8 +255,7 @@ export function Prenotazione() {
   /* ── Scelta di data e orario ──────────────────────────────────── */
   const abilitate = abilitatePer(srv.categoria, sedeId);
   const opScelta = operatriceId === NESSUNA_PREFERENZA ? null : operatrice(operatriceId);
-  const acconto = Math.round(srv.prezzo * QUOTA_ACCONTO);
-  const daPagare = importoDovuto(srv.prezzo, modalita, QUOTA_ACCONTO);
+  const daPagare = importoDovuto(srv.prezzo, modalita);
   const pronto = giorno !== null && slotScelto !== null;
   const inCorso = fase === "pagamento";
 
@@ -468,7 +450,6 @@ export function Prenotazione() {
         {(
           [
             ["in-salone", "Pago in salone", "Come sempre, alla cassa", 0],
-            ["acconto", "Acconto del 30%", "Blocchi lo slot, il resto in salone", acconto],
             ["saldo", "Pago tutto ora", "Arrivi e ti siedi, niente cassa", srv.prezzo],
           ] as const
         ).map(([id, titolo, sotto, importo]) => (

@@ -17,7 +17,12 @@ export type StatoAppuntamento =
 export type StatoPagamento =
   /** Paga alla cassa, come si è sempre fatto. */
   | "in-salone"
-  /** Ha versato l'acconto online, il resto si salda in salone. */
+  /**
+   * Acconto parziale versato online.
+   * Non è più fra le opzioni offerte alla cliente, ma il valore resta nel
+   * modello: serve a leggere gli appuntamenti vecchi senza che si rompano, e
+   * a riattivare la modalità se il salone cambierà idea.
+   */
   | "acconto-versato"
   /** Ha pagato l'intero importo online. */
   | "saldato"

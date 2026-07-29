@@ -83,15 +83,10 @@ function perGiorno(data: Date, oggi: Date, sedeId: SedeId): Appuntamento[] {
       const srv = scegli(r, suoi);
       if (t + srv.durata > fascia.chiude) break;
 
-      const q = r();
-      const pagamento: StatoPagamento =
-        q < 0.45 ? "in-salone" : q < 0.75 ? "acconto-versato" : "saldato";
-      const incassato =
-        pagamento === "acconto-versato"
-          ? Math.round(srv.prezzo * 0.3)
-          : pagamento === "saldato"
-            ? srv.prezzo
-            : 0;
+      // Il salone non offre acconti: gli appuntamenti sono pagati alla cassa
+      // oppure saldati online, e l'agenda deve mostrare solo stati possibili.
+      const pagamento: StatoPagamento = r() < 0.55 ? "in-salone" : "saldato";
+      const incassato = pagamento === "saldato" ? srv.prezzo : 0;
 
       let stato: StatoAppuntamento = "confermato";
       if (eePassato) {
