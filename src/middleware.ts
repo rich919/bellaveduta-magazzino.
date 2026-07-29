@@ -17,7 +17,12 @@
  */
 
 import { NextResponse, type NextRequest } from "next/server";
-import { COOKIE_SESSIONE, segretiConfigurati, tokenValido } from "@/lib/auth";
+import {
+  COOKIE_SESSIONE,
+  gestionaleAperto,
+  segretiConfigurati,
+  tokenValido,
+} from "@/lib/auth";
 
 const PREFISSO_ADMIN = "/gestionale";
 /** L'API che apre e chiude la sessione: vive fuori da /gestionale. */
@@ -59,6 +64,14 @@ export async function middleware(req: NextRequest) {
   // Qui non deve esistere nulla del sito pubblico.
   if (!ePagina) {
     return NextResponse.rewrite(new URL("/404", req.url), { status: 404 });
+  }
+
+  // Demo aperta: si entra direttamente, e la pagina di login non ha più senso.
+  if (gestionaleAperto()) {
+    if (pathname === `${PREFISSO_ADMIN}/login`) {
+      return NextResponse.redirect(new URL(PREFISSO_ADMIN, req.url));
+    }
+    return NextResponse.next();
   }
 
   // La pagina di login deve restare accessibile senza sessione.

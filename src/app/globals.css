@@ -982,3 +982,9 @@ button {
 .staff-tag span { font-size: 0.6rem; border: 1px solid var(--bordo); color: var(--testo-2);
   border-radius: var(--r-pill); padding: 0.1rem 0.45rem; }
 .staff-doppia { font-size: 0.66rem; color: var(--oro); margin-top: 0.4rem; }
+
+/* Avviso della demo senza password: deve essere impossibile non vederlo. */
+.avviso-demo { background: var(--ambra); color: #2a1f08; font-size: 0.78rem;
+  padding: 0.55rem 1.2rem; text-align: center; }
+.avviso-demo b { font-weight: 700; }
+@media (prefers-color-scheme: dark) { .avviso-demo { color: #1d1719; } }

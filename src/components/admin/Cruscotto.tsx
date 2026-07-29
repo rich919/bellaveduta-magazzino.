@@ -46,7 +46,7 @@ const ETICHETTA_STATO: Record<string, string> = {
   "non-presentata": "Non presentata",
 };
 
-export function Cruscotto() {
+export function Cruscotto({ senzaPassword = false }: { senzaPassword?: boolean }) {
   const router = useRouter();
   const [oggi] = useState(() => new Date());
   // Le due sedi hanno agende e personale diversi: si guarda una per volta.
@@ -141,6 +141,14 @@ export function Cruscotto() {
 
   return (
     <>
+      {senzaPassword && (
+        <p className="avviso-demo" role="status">
+          <b>Demo aperta.</b> Gli appuntamenti sono inventati e chiunque abbia il
+          link può vedere questa pagina. Prima di usarla davvero va rimessa la
+          password.
+        </p>
+      )}
+
       <header className="adm-bar">
         <div className="adm-bar-in">
           <span className="marchio">{SALONE.nome}</span>
@@ -164,9 +172,16 @@ export function Cruscotto() {
           </div>
           <div className="adm-who">
             <span>{dataEstesa(oggi)}</span>
-            <button type="button" className="btn btn-2" style={{ padding: "0.35rem 0.9rem", fontSize: "0.7rem" }} onClick={esci}>
-              Esci
-            </button>
+            {!senzaPassword && (
+              <button
+                type="button"
+                className="btn btn-2"
+                style={{ padding: "0.35rem 0.9rem", fontSize: "0.7rem" }}
+                onClick={esci}
+              >
+                Esci
+              </button>
+            )}
           </div>
         </div>
       </header>

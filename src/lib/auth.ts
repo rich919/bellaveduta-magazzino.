@@ -88,6 +88,21 @@ export async function tokenValido(
 }
 
 /**
+ * Modalità dimostrativa: il gestionale si apre senza password.
+ *
+ * Serve per far vedere alla titolare come sarebbe la sua dashboard, senza
+ * doverle passare credenziali. Va detto chiaro: con questa attiva chiunque
+ * abbia il link entra e vede l'agenda. Va bene perché i dati sono finti, non
+ * appena diventano veri va spenta.
+ *
+ * L'autenticazione resta tutta qui sotto: si riaccende togliendo questa
+ * variabile e rimettendo ADMIN_PASSWORD.
+ */
+export function gestionaleAperto(): boolean {
+  return process.env.GESTIONALE_SENZA_PASSWORD === "1";
+}
+
+/**
  * I segreti, letti dall'ambiente.
  *
  * In sviluppo esiste un fallback per non bloccare chi clona il repo, ma in
@@ -98,7 +113,9 @@ export function segretiConfigurati(): { password: string; segreto: string } {
   const password = process.env.ADMIN_PASSWORD;
   const segreto = process.env.AUTH_SECRET;
 
-  if (process.env.NODE_ENV === "production") {
+  // In modalità dimostrativa la password non viene mai confrontata: pretenderla
+  // impedirebbe l'avvio proprio nel caso in cui non serve.
+  if (process.env.NODE_ENV === "production" && !gestionaleAperto()) {
     if (!password || !segreto) {
       throw new Error(
         "ADMIN_PASSWORD e AUTH_SECRET devono essere impostate in produzione. " +

@@ -40,7 +40,20 @@ d'ambiente.
 ### Variabili su Vercel
 
 Sul progetto `site` basta `APP_MODE=site`.
-Sul progetto `admin` servono tutte e tre, altrimenti l'app si rifiuta di partire:
+
+Sul progetto `admin`, **finché è una demo**:
+
+```
+APP_MODE=admin
+GESTIONALE_SENZA_PASSWORD=1
+```
+
+Il gestionale si apre a chiunque abbia il link e mostra un avviso in cima alla
+pagina. Va bene perché gli appuntamenti sono inventati: serve a far vedere alla
+titolare come sarebbe la sua dashboard, senza passarle credenziali.
+
+**Appena ci finiscono appuntamenti veri**, si toglie quella variabile e si
+mettono queste due — l'autenticazione è già tutta lì, non va riscritta niente:
 
 ```
 APP_MODE=admin
