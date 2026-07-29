@@ -95,16 +95,20 @@ export function eChiuso(data: Date): boolean {
  * ATTENZIONE: sono scritte per la demo, non sono recensioni reali di clienti.
  * Prima di andare in produzione vanno sostituite con quelle vere di Treatwell,
  * importandole tramite la loro pagina pubblica o l'API partner.
+ *
+ * I nomi qui non devono coincidere né con le operatrici (una recensione firmata
+ * "Martina" accanto a Martina che lavora in salone sembra scritta in casa) né
+ * con la cliente dimostrativa della home.
  */
 export const RECENSIONI = [
   {
-    nome: "Elena",
+    nome: "Ilaria",
     stelle: 5,
     testo:
       "Vado da due anni e non cambierei. Il semipermanente mi dura tre settimane piene, e sanno esattamente come tenere le mie unghie che sono sottilissime.",
   },
   {
-    nome: "Martina",
+    nome: "Serena",
     stelle: 5,
     testo:
       "Puntualissime, cosa che per me vale quanto il lavoro. Sono entrata alle 15 e alle 16 ero fuori con il baby boomer fatto benissimo.",

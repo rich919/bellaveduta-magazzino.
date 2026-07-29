@@ -54,6 +54,8 @@ const IMMAGINI = [
   // ── Copertine ────────────────────────────────────────────────────────
   { slug: "hero", ratio: "16:9",
     prompt: "Wide interior of a refined nail and beauty salon: pale oak manicure stations, a full wall of nail polish arranged in a colour gradient, upholstered chairs in dusty rose, tall window with sheer linen curtains, olive tree in a stone pot." },
+  { slug: "hero-ritratto", ratio: "3:4",
+    prompt: "Portrait of a young Italian woman with softly gathered dark hair, serene confident expression, looking straight at the camera, one hand resting near her jaw showing perfectly manicured nude nails, plain warm cream background with generous empty space around her." },
   { slug: "og", ratio: "16:9",
     prompt: "Elegant wide interior of a beauty salon at golden hour, generous empty space on the right of the frame for overlaying text later." },
 

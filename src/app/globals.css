@@ -373,6 +373,15 @@ button {
 }
 .sez-cap .piu {
   margin-left: auto;
+  /* "Tutti →" su una riga sola. Non basta `white-space: nowrap`: la regola
+     globale rende gli svg `display: block`, e un blocco dentro un link manda
+     comunque la freccia a capo. Disponendo il link come flex il problema non
+     si pone, e `flex: none` evita che il titolo accanto lo stringa. */
+  display: flex;
+  align-items: center;
+  gap: 0.28rem;
+  flex: none;
+  white-space: nowrap;
   font-size: 0.74rem;
   color: var(--rosa);
   font-weight: 600;
@@ -505,18 +514,9 @@ button {
 }
 
 /* ═══════════ HOME ═══════════ */
-.hero { margin: 0 1.1rem; border-radius: var(--r-card); overflow: hidden;
-  box-shadow: var(--ombra-2); background: var(--card); }
-.hero-testo { padding: 1.1rem 1.1rem 0.9rem; text-align: center; }
-.hero-claim { font-family: var(--script); font-style: italic; font-size: 1.62rem;
-  color: var(--rosa); line-height: 1.1; }
-.hero-sub { font-size: 0.8rem; color: var(--testo); margin-top: 0.3rem; }
-.hero-voto { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 0.7rem;
-  background: var(--rosa-tenue); color: var(--rosa-scuro); border-radius: var(--r-pill);
-  padding: 0.3rem 0.85rem; font-size: 0.74rem; font-weight: 600; }
-.hero-foto { height: 208px; }
-.hero-azioni { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin: 0.9rem 1.1rem 0; }
-
+/* Le fasce che scorrono in orizzontale: categorie, vetrina, staff, recensioni.
+   Usate anche fuori dalla home (servizi, shop), quindi non toccarle pensando
+   che riguardino solo questa pagina. */
 .cats { display: flex; gap: 0.55rem; overflow-x: auto; padding: 1.1rem 1.1rem 0.4rem;
   scrollbar-width: none; }
 .cats::-webkit-scrollbar { display: none; }
@@ -531,16 +531,6 @@ button {
 .carosello { display: flex; gap: 0.7rem; overflow-x: auto; padding: 0 1.1rem 0.4rem;
   scrollbar-width: none; }
 .carosello::-webkit-scrollbar { display: none; }
-.amata { flex: none; width: 148px; background: var(--card); border-radius: var(--r-card);
-  box-shadow: var(--ombra); overflow: hidden; }
-.amata-foto { height: 96px; }
-.amata-b { padding: 0.55rem 0.6rem 0.65rem; }
-.amata-n { font-size: 0.76rem; font-weight: 600; line-height: 1.25; min-height: 2.1em; }
-.amata-r { display: flex; align-items: center; gap: 0.4rem; margin-top: 0.35rem; }
-.amata-p { font-family: var(--serif); font-size: 0.95rem; color: var(--rosa); }
-.amata-btn { margin-left: auto; font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.06em; background: var(--rosa-tenue); color: var(--rosa-scuro);
-  border-radius: var(--r-pill); padding: 0.24rem 0.6rem; }
 
 .member { display: block; width: calc(100% - 2.2rem); margin: 1.2rem 1.1rem 0; border: 0;
   border-radius: var(--r-card); padding: 1rem 1.1rem; color: #FFF8F4; text-align: left;
@@ -1067,3 +1057,93 @@ button {
   letter-spacing: 0.07em; text-transform: uppercase; white-space: nowrap;
   transition: background 0.2s var(--ease), color 0.2s var(--ease); }
 .riga-prenota:hover { background: var(--rosa); color: var(--su-rosa); }
+
+/* ═══════════ COPERTINA EDITORIALE ═══════════ */
+.avatar-mini { width: 34px; height: 34px; flex: none; border-radius: 999px;
+  display: grid; place-items: center; font-size: 0.68rem; font-weight: 700; color: #fff;
+  background: linear-gradient(140deg, var(--rosa), var(--oro)); }
+
+.copertina { display: grid; grid-template-columns: minmax(0, 1fr) 42%;
+  align-items: center; gap: 0.4rem; padding: 0.4rem 0 0 1.1rem; position: relative;
+  /* Il ritratto sborda di proposito oltre il bordo destro: senza questo taglio
+     la pagina diventa scorrevole in orizzontale di quei pochi pixel, e su
+     telefono si sente come un difetto. `clip` invece di `hidden` perché non
+     crea un contenitore di scorrimento e lascia l'ombra libera in verticale. */
+  overflow-x: clip; overflow-y: visible; }
+.copertina-testo { min-width: 0; }
+.saluto { font-size: 0.82rem; color: var(--testo); }
+.saluto em { font-family: var(--script); font-style: italic; font-size: 1.12rem;
+  color: var(--oro); }
+.copertina h1 { font-family: var(--serif); font-size: 1.92rem; line-height: 1.08;
+  letter-spacing: -0.02em; margin-top: 0.35rem; }
+.filetto { display: block; width: 42px; height: 2px; margin: 0.7rem 0; border-radius: 2px;
+  background: linear-gradient(90deg, var(--oro), transparent); }
+.copertina-testo p { font-size: 0.78rem; color: var(--testo); line-height: 1.45; }
+.copertina-voto { margin-top: 0.6rem !important; font-size: 0.74rem !important;
+  font-weight: 600; }
+/* Il ritratto sborda a destra con una forma morbida: è ciò che toglie alla
+   copertina l'aria da riquadro e le dà quella da rivista. */
+.copertina-foto { aspect-ratio: 3 / 4; border-radius: 50% 12px 50% 50% / 45% 12px 55% 55%;
+  margin-right: -0.6rem; box-shadow: var(--ombra-2); }
+
+/* ═══════════ AZIONI RAPIDE ═══════════ */
+.azioni { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.2rem;
+  margin: 1.2rem 1.1rem 0; padding: 0.9rem 0.5rem; border-radius: var(--r-card);
+  background: var(--rosa-scuro); box-shadow: var(--ombra-2); }
+.azione { display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+  color: var(--su-rosa); font-size: 0.63rem; font-weight: 600; text-align: center;
+  padding: 0.15rem; transition: opacity 0.2s var(--ease); }
+.azione:active { opacity: 0.7; }
+.azione-ico { width: 34px; height: 34px; border-radius: 999px; display: grid;
+  place-items: center; border: 1px solid rgb(255 255 255 / 0.28);
+  background: rgb(255 255 255 / 0.08); }
+.azione-ico svg { width: 17px; height: 17px; stroke: currentColor; fill: none;
+  stroke-width: 1.6; }
+@media (prefers-color-scheme: dark) {
+  .azioni { background: var(--card-2); }
+  .azione { color: var(--inchiostro); }
+  .azione-ico { border-color: var(--bordo); background: transparent; }
+}
+
+/* ═══════════ VETRINA SERVIZI ═══════════ */
+.vetrina { flex: none; width: 138px; }
+.vetrina-foto { aspect-ratio: 1; border-radius: 16px; box-shadow: var(--ombra); }
+.vetrina-b { padding: 0.5rem 0.1rem 0; }
+.vetrina-b b { display: block; font-size: 0.78rem; font-weight: 600; line-height: 1.25;
+  min-height: 2.1em; }
+.vetrina-b small { display: block; font-size: 0.72rem; color: var(--rosa);
+  font-weight: 600; margin-top: 0.15rem; }
+
+/* ═══════════ BLOCCO PREMIUM ═══════════ */
+.premium { margin: 1.8rem 1.1rem 0; }
+/* Mosaico a quattro riquadri di altezze diverse: una griglia regolare
+   sembrerebbe un elenco di miniature, non un collage. */
+.premium-collage { display: grid; grid-template-columns: 1.15fr 1fr;
+  grid-template-rows: 108px 78px 108px; gap: 0.5rem; }
+.pc { border-radius: 18px; box-shadow: var(--ombra); }
+.pc-1 { grid-column: 1; grid-row: 1 / span 2; border-top-left-radius: 34px; }
+.pc-2 { grid-column: 2; grid-row: 1; }
+.pc-3 { grid-column: 1; grid-row: 3; }
+.pc-4 { grid-column: 2; grid-row: 2 / span 2; border-bottom-right-radius: 34px; }
+
+.premium-testo { margin-top: 1.4rem; }
+.premium-sigillo { width: 42px; height: 42px; border-radius: 999px; display: grid;
+  place-items: center; color: var(--oro); margin-bottom: 0.7rem;
+  border: 1px solid color-mix(in oklab, var(--oro) 45%, transparent);
+  background: color-mix(in oklab, var(--oro) 9%, transparent); }
+.premium-sigillo svg { width: 20px; height: 20px; }
+.premium-testo h2 { font-family: var(--serif); font-size: 1.72rem; line-height: 1.1;
+  letter-spacing: -0.02em; }
+.premium-testo p { font-size: 0.82rem; color: var(--testo); line-height: 1.5;
+  margin-top: 0.7rem; max-width: 34ch; }
+.premium-cta { margin-top: 1rem; }
+
+.premium-numeri { display: flex; gap: 0.5rem; overflow-x: auto; margin-top: 1.4rem;
+  padding-bottom: 0.3rem; scrollbar-width: none; }
+.premium-numeri::-webkit-scrollbar { display: none; }
+.premium-numeri div { flex: none; min-width: 92px; background: var(--card);
+  border-radius: 14px; box-shadow: var(--ombra); padding: 0.75rem 0.8rem; }
+.premium-numeri b { display: block; font-family: var(--serif); font-size: 1.45rem;
+  color: var(--rosa); line-height: 1; }
+.premium-numeri span { display: block; font-size: 0.63rem; color: var(--testo-2);
+  margin-top: 0.3rem; line-height: 1.2; }

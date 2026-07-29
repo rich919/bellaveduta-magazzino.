@@ -394,5 +394,14 @@
     "byte": 1728389,
     "generataIl": "2026-07-29T12:11:54.752Z",
     "formato": "webp"
+  },
+  "hero-ritratto": {
+    "prompt": "Portrait of a young Italian woman with softly gathered dark hair, serene confident expression, looking straight at the camera, one hand resting near her jaw showing perfectly manicured nude nails, plain warm cream background with generous empty space around her.",
+    "stile": "Shot on medium format with an 85mm lens, shallow depth of field. Soft natural window light falling from the left, gentle shadows, no harsh contrast. Warm palette of cream, dusty rose, camel and pale terracotta; muted and slightly desaturated, never vivid. Editorial beauty campaign for a refined Italian salon: calm, expensive, understated. Subtle fine film grain. No text, no logos, no watermarks, no signage. Photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "3:4",
+    "byte": 1662433,
+    "generataIl": "2026-07-29T13:50:23.033Z",
+    "formato": "webp"
   }
 }

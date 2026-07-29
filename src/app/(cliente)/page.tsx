@@ -1,11 +1,12 @@
 import Link from "next/link";
-import { Icona, ICONA_CATEGORIA } from "@/components/Icone";
+import { Icona, ICONA_CATEGORIA, type NomeIcona } from "@/components/Icone";
 import { Foto, fotoCategoria } from "@/components/app/Pezzi";
 import { CardTessera } from "@/components/app/CardTessera";
 import { ProssimoAppuntamento } from "@/components/app/ProssimoAppuntamento";
 import { MappaSalone } from "@/components/app/MappaSalone";
 import { SelettoreSede } from "@/components/app/SelettoreSede";
-import { Foto as FotoStaff } from "@/components/app/Pezzi";
+import { BloccoPremium } from "@/components/app/BloccoPremium";
+import { Saluto } from "@/components/app/Saluto";
 import { OPERATRICI } from "@/lib/data/staff";
 import { CATEGORIE, SERVIZI } from "@/lib/data/services";
 import { RECENSIONI, SALONE } from "@/lib/data/salon";
@@ -20,7 +21,22 @@ const IN_VETRINA: ReadonlyArray<[string, string]> = [
   ["semipermanente-mani", "Monocolore"],
   ["ciglia", "Extension ciglia volume"],
   ["viso", "Pulizia viso profonda"],
-  ["semigel", "Semigel"],
+  ["capelli", "Taglio e piega"],
+  ["massaggi", "Massaggio rilassante 50′"],
+];
+
+/**
+ * Le scorciatoie sotto la copertina.
+ *
+ * Quattro, non di più: servono a dare una direzione immediata senza scorrere,
+ * e una fila di otto icone non è più una scorciatoia ma un secondo menu.
+ * Portano tutte a schermate che esistono davvero — niente voci decorative.
+ */
+const AZIONI: ReadonlyArray<{ href: string; icona: NomeIcona; testo: string }> = [
+  { href: "/prenota", icona: "prenota", testo: "Prenota" },
+  { href: "/dove-siamo", icona: "luogo", testo: "Le sedi" },
+  { href: "/profilo/tessera", icona: "corona", testo: "Tessera" },
+  { href: "/shop", icona: "shop", testo: "Shop" },
 ];
 
 export default function Home() {
@@ -31,42 +47,52 @@ export default function Home() {
   return (
     <>
       <div className="app-head">
-        <span className="tondo" aria-hidden="true">
-          ✦
+        <span className="avatar-mini" aria-hidden="true">
+          ER
         </span>
-        <div className="marchio">{SALONE.nome}</div>
+        <span style={{ flex: 1 }} />
         <button type="button" className="tondo" aria-label="Notifiche">
           <Icona nome="campana" style={{ width: 17, height: 17 }} />
         </button>
+        <Link href="/servizi" className="tondo" aria-label="Cerca un trattamento">
+          <Icona nome="lente" style={{ width: 17, height: 17 }} />
+        </Link>
       </div>
 
-      <div className="hero">
-        <div className="hero-testo">
-          <p className="hero-claim">{SALONE.claim}</p>
-          <p className="hero-sub">{SALONE.manifesto}</p>
-          <p className="hero-voto">
-            <span className="stelle">★</span> {numero(SALONE.valutazione)} —{" "}
+      {/* Copertina editoriale: titolo a sinistra, ritratto che sborda a destra. */}
+      <section className="copertina">
+        <div className="copertina-testo">
+          <Saluto />
+          <h1>
+            La bellezza
+            <br />è una cura
+          </h1>
+          <span className="filetto" aria-hidden="true" />
+          <p>{SALONE.manifesto}</p>
+          <p className="copertina-voto">
+            <span className="stelle">★</span> {numero(SALONE.valutazione)} ·{" "}
             {numero(SALONE.recensioni)} recensioni
           </p>
         </div>
         <Foto
-          src="/images/hero.webp"
-          alt="L'interno del salone Claudia Nails"
-          className="hero-foto"
+          src="/images/hero-ritratto.webp"
+          alt=""
+          className="copertina-foto"
+          sizes="200px"
           priorita
         />
-      </div>
-
-      <section className="promessa">
-        <span className="promessa-sigillo" aria-hidden="true">
-          <Icona nome="foglia" />
-        </span>
-        <h2>100% Originale &amp; Organico</h2>
-        <p>
-          Siamo orgogliosi di utilizzare solo prodotti 100% originali e organici
-          per i nostri servizi di bellezza.
-        </p>
       </section>
+
+      <nav className="azioni" aria-label="Scorciatoie">
+        {AZIONI.map((a) => (
+          <Link key={a.href} href={a.href} className="azione">
+            <span className="azione-ico">
+              <Icona nome={a.icona} />
+            </span>
+            {a.testo}
+          </Link>
+        ))}
+      </nav>
 
       <div className="sez-cap pad">
         <h2 className="sez-tit">Dove vuoi venire</h2>
@@ -75,14 +101,34 @@ export default function Home() {
         <SelettoreSede />
       </div>
 
-      <div className="hero-azioni">
-        <Link href="/prenota" className="btn">
-          Prenota ora
-        </Link>
-        <Link href="/servizi" className="btn btn-2">
-          Vedi i servizi
+      <ProssimoAppuntamento />
+
+      <div className="sez-cap pad">
+        <h2 className="sez-tit">I più richiesti</h2>
+        <Link href="/servizi" className="piu">
+          Tutti <Icona nome="freccia" style={{ width: 13, height: 13 }} />
         </Link>
       </div>
+      <div className="carosello">
+        {vetrina.map((s) => (
+          <Link key={s.id} href={`/servizi/${s.id}`} className="vetrina">
+            <Foto
+              src={fotoCategoria(s.categoria)}
+              alt=""
+              className="vetrina-foto"
+              sizes="150px"
+            />
+            <div className="vetrina-b">
+              <b>{s.nome}</b>
+              <small className="num">da {euro(s.prezzo)}</small>
+            </div>
+          </Link>
+        ))}
+      </div>
+
+      <CardTessera />
+
+      <BloccoPremium />
 
       <div className="cats">
         {CATEGORIE.map((c) => (
@@ -95,45 +141,16 @@ export default function Home() {
         ))}
       </div>
 
-      <CardTessera />
-      <ProssimoAppuntamento />
-
-      <div className="sez-cap pad">
-        <h2 className="sez-tit">I più richiesti</h2>
-        <Link href="/servizi" className="piu">
-          Tutti ›
-        </Link>
-      </div>
-      <div className="carosello">
-        {vetrina.map((s) => (
-          <Link key={s.id} href={`/servizi/${s.id}`} className="amata">
-            <Foto
-              src={fotoCategoria(s.categoria)}
-              alt=""
-              className="amata-foto"
-              sizes="160px"
-            />
-            <div className="amata-b">
-              <div className="amata-n">{s.nome}</div>
-              <div className="amata-r">
-                <span className="amata-p num">{euro(s.prezzo)}</span>
-                <span className="amata-btn">Prenota</span>
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
-
       <div className="sez-cap pad">
         <h2 className="sez-tit">Chi ti segue</h2>
         <Link href="/staff" className="piu">
-          Tutte ›
+          Tutte <Icona nome="freccia" style={{ width: 13, height: 13 }} />
         </Link>
       </div>
       <div className="carosello">
         {OPERATRICI.map((o) => (
           <Link key={o.id} href="/staff" className="staff-card">
-            <FotoStaff src={o.foto} alt={o.nome} className="staff-foto" sizes="120px" />
+            <Foto src={o.foto} alt={o.nome} className="staff-foto" sizes="120px" />
             <div className="staff-b">
               <b>{o.nome}</b>
               <small>{o.ruolo}</small>
@@ -158,7 +175,7 @@ export default function Home() {
       <div className="sez-cap pad">
         <h2 className="sez-tit">Dove siamo</h2>
         <Link href="/dove-siamo" className="piu">
-          Indicazioni ›
+          Indicazioni <Icona nome="freccia" style={{ width: 13, height: 13 }} />
         </Link>
       </div>
       <div className="pad">
