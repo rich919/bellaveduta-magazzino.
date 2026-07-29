@@ -30,7 +30,7 @@ const DESTINAZIONE = path.join(RADICE, "public", "images");
 const MANIFEST = path.join(DESTINAZIONE, "manifest.json");
 
 const BASE = "https://api.kie.ai/api/v1/jobs";
-const MODELLO = "nano-banana-pro";
+const MODELLO = "google/nano-banana";
 const INTERVALLO_POLL_MS = 3000;
 const TIMEOUT_MS = 3 * 60 * 1000;
 
@@ -45,53 +45,94 @@ const STILE =
   "photorealistic, high detail.";
 
 const IMMAGINI = [
-  { slug: "hero", ratio: "16:9", risoluzione: "2K",
-    prompt: "Wide interior of an elegant small nail and beauty salon: manicure stations with warm wood surfaces, a wall of nail polish bottles arranged by color, a comfortable chair, plants near a large window." },
+  // ── Copertina ────────────────────────────────────────────────────────
+  { slug: "hero", ratio: "16:9",
+    prompt: "Wide interior of an elegant small nail and beauty salon: manicure stations with warm wood surfaces, a wall of nail polish bottles arranged by colour, a comfortable chair, plants near a large window." },
+  { slug: "og", ratio: "16:9",
+    prompt: "Elegant wide shot of a nail salon interior with warm lighting, welcoming and professional, generous empty space in the frame for overlaying text later." },
 
-  { slug: "categoria-semipermanente-mani", ratio: "4:3", risoluzione: "1K",
-    prompt: "Close-up of a woman's hands with freshly applied glossy deep red semi-permanent nail polish, resting on a linen towel." },
-  { slug: "categoria-semipermanente-piedi", ratio: "4:3", risoluzione: "1K",
-    prompt: "Close-up of feet with freshly painted glossy nail polish during a pedicure, clean spa setting, soft towel." },
-  { slug: "categoria-semigel", ratio: "4:3", risoluzione: "1K",
-    prompt: "Extreme close-up of nails with a baby boomer gradient manicure, nude to white ombre, glossy finish." },
-  { slug: "categoria-ricostruzione", ratio: "4:3", risoluzione: "1K",
-    prompt: "Nail technician's gloved hands shaping a gel nail extension with a file, precise detailed work, macro." },
-  { slug: "categoria-manicure", ratio: "4:3", risoluzione: "1K",
-    prompt: "Manicure in progress: technician tending to cuticles with professional tools, hands resting on a small cushion." },
-  { slug: "categoria-pedicure", ratio: "4:3", risoluzione: "1K",
-    prompt: "Pedicure treatment in a calm salon, feet in a basin with warm water and flower petals, towels folded nearby." },
-  { slug: "categoria-ceretta", ratio: "4:3", risoluzione: "1K",
-    prompt: "Clean minimal beauty treatment room prepared for waxing: fresh white linens on a treatment bed, wax warmer, folded towels, soft light." },
-  { slug: "categoria-viso", ratio: "4:3", risoluzione: "1K",
+  // ── Una per categoria di trattamento ─────────────────────────────────
+  { slug: "cat-semipermanente-mani", ratio: "4:3",
+    prompt: "Close-up of a woman's hands with freshly applied glossy deep red semi-permanent nail polish, resting on a folded linen towel." },
+  { slug: "cat-semipermanente-piedi", ratio: "4:3",
+    prompt: "Close-up of clean feet with freshly painted glossy nail polish during a pedicure, spa setting, soft towel underneath." },
+  { slug: "cat-semigel", ratio: "4:3",
+    prompt: "Extreme close-up of almond-shaped nails with a baby boomer gradient manicure, nude fading to white, high gloss finish." },
+  { slug: "cat-ricostruzione", ratio: "4:3",
+    prompt: "Nail technician's hands shaping a gel nail extension with a file, precise detailed work, macro shot, professional lamp nearby." },
+  { slug: "cat-manicure", ratio: "4:3",
+    prompt: "Manicure in progress: technician tending to cuticles with professional tools, client's hand resting on a small velvet cushion." },
+  { slug: "cat-pedicure", ratio: "4:3",
+    prompt: "Pedicure treatment in a calm salon, feet in a ceramic basin with warm water and flower petals, folded towels nearby." },
+  { slug: "cat-ceretta", ratio: "4:3",
+    prompt: "Clean minimal beauty treatment room prepared for waxing: fresh white linens on a treatment bed, wax warmer, folded towels, soft daylight." },
+  { slug: "cat-viso", ratio: "4:3",
     prompt: "Woman relaxing during a facial treatment, clay mask applied, eyes closed, serene expression, soft spa lighting." },
-  { slug: "categoria-ciglia", ratio: "4:3", risoluzione: "1K",
-    prompt: "Macro close-up of a closed eye with beautifully applied volume eyelash extensions, natural skin texture." },
-  { slug: "categoria-massaggi", ratio: "4:3", risoluzione: "1K",
-    prompt: "Relaxing back massage in a warm dimly lit treatment room, therapist's hands, rolled towels and a candle nearby." },
+  { slug: "cat-ciglia", ratio: "4:3",
+    prompt: "Macro close-up of a closed eye with beautifully applied volume eyelash extensions, natural skin texture, soft light." },
+  { slug: "cat-massaggi", ratio: "4:3",
+    prompt: "Relaxing back massage in a warm dimly lit treatment room, therapist's hands mid-stroke, rolled towels and a candle nearby." },
 
-  { slug: "operatrice-claudia", ratio: "3:4", risoluzione: "1K",
-    prompt: "Portrait of a confident Italian woman in her forties, salon owner, dark hair, warm smile, wearing a simple black work uniform, standing in her nail salon, blurred background." },
-  { slug: "operatrice-martina", ratio: "3:4", risoluzione: "1K",
-    prompt: "Portrait of a young Italian woman in her late twenties, nail artist, hair tied back, friendly expression, black work uniform, salon background blurred." },
-  { slug: "operatrice-sara", ratio: "3:4", risoluzione: "1K",
-    prompt: "Portrait of an Italian woman in her thirties, beautician, shoulder-length brown hair, calm and welcoming expression, black work uniform, treatment room background blurred." },
-  { slug: "operatrice-giulia", ratio: "3:4", risoluzione: "1K",
+  // ── Ritratti delle operatrici ────────────────────────────────────────
+  // Persone non esistenti, generate: non ritraggono nessuno del salone.
+  { slug: "operatrice-claudia", ratio: "3:4",
+    prompt: "Portrait of a confident Italian woman in her forties, salon owner, dark hair pulled back, warm genuine smile, simple black work uniform, standing in her nail salon, background softly blurred." },
+  { slug: "operatrice-martina", ratio: "3:4",
+    prompt: "Portrait of a young Italian woman in her late twenties, nail artist, hair tied back, friendly open expression, black work uniform, salon background softly blurred." },
+  { slug: "operatrice-sara", ratio: "3:4",
+    prompt: "Portrait of an Italian woman in her thirties, beautician, shoulder-length brown hair, calm and welcoming expression, black work uniform, treatment room blurred behind her." },
+  { slug: "operatrice-giulia", ratio: "3:4",
     prompt: "Portrait of an Italian woman in her early thirties, aesthetician specialising in facials, curly hair, gentle smile, black work uniform, soft blurred background." },
 
-  { slug: "interno-1", ratio: "3:2", risoluzione: "1K",
-    prompt: "Detail of a nail polish display wall in a salon, hundreds of bottles arranged in a color gradient from nude to deep burgundy." },
-  { slug: "interno-2", ratio: "3:2", risoluzione: "1K",
-    prompt: "Reception corner of a small beauty salon: wooden counter, a vase with dried flowers, appointment book, warm afternoon light." },
-  { slug: "interno-3", ratio: "3:2", risoluzione: "1K",
+  // ── Ambienti ─────────────────────────────────────────────────────────
+  { slug: "interno-1", ratio: "3:2",
+    prompt: "Detail of a nail polish display wall in a salon, hundreds of bottles arranged in a colour gradient from nude to deep burgundy." },
+  { slug: "interno-2", ratio: "3:2",
+    prompt: "Reception corner of a small beauty salon: wooden counter, vase with dried flowers, appointment book, warm afternoon light." },
+  { slug: "interno-3", ratio: "3:2",
     prompt: "Quiet treatment room in a beauty salon, neatly folded towels, professional lamp, plants, clean minimal Italian interior." },
 
-  { slug: "dettaglio-1", ratio: "1:1", risoluzione: "1K",
-    prompt: "Overhead flat lay of professional manicure tools arranged neatly on a marble surface: files, cuticle pusher, brushes, polish bottles." },
-  { slug: "dettaglio-2", ratio: "1:1", risoluzione: "1K",
-    prompt: "Macro shot of a nail polish brush lifting from the bottle, a glossy drop of deep plum lacquer about to fall." },
-
-  { slug: "og", ratio: "16:9", risoluzione: "1K",
-    prompt: "Elegant wide shot of a nail salon interior with warm lighting, welcoming and professional, space in the frame suitable for overlaying text later." },
+  // ── Prodotti dello shop ──────────────────────────────────────────────
+  // ATTENZIONE: sono still life GENERICI e SENZA MARCHIO. Non riproducono i
+  // prodotti ghd reali e non devono essere spacciati per tali. Prima di andare
+  // in produzione vanno sostituiti con le foto ufficiali fornite dal marchio,
+  // che è la prassi normale per un rivenditore autorizzato.
+  { slug: "prod-piastra-1", ratio: "1:1",
+    prompt: "Unbranded matte black professional hair straightener lying on a cream marble surface, studio still life, soft shadow, no logos or text anywhere." },
+  { slug: "prod-piastra-2", ratio: "1:1",
+    prompt: "Unbranded glossy black ceramic hair straightener standing upright on a beige stone surface, minimal studio still life, no logos or text." },
+  { slug: "prod-piastra-3", ratio: "1:1",
+    prompt: "Unbranded dark grey professional hair styler on a linen cloth, warm side light, minimal studio product photograph, no logos or text." },
+  { slug: "prod-piastra-4", ratio: "1:1",
+    prompt: "Unbranded cordless black hair straightener with a small charging base on a pale marble surface, clean studio still life, no logos or text." },
+  { slug: "prod-phon-1", ratio: "1:1",
+    prompt: "Unbranded matte black professional hair dryer on a cream background, elegant studio product photograph, soft shadow, no logos or text." },
+  { slug: "prod-phon-2", ratio: "1:1",
+    prompt: "Unbranded black hair dryer with a concentrator nozzle beside it on a beige surface, minimal studio still life, no logos or text." },
+  { slug: "prod-ferro-1", ratio: "1:1",
+    prompt: "Unbranded black conical curling wand on a pale marble surface with a soft shadow, studio still life, no logos or text." },
+  { slug: "prod-spazzola-1", ratio: "1:1",
+    prompt: "Unbranded black round hot air styling brush on a cream linen surface, minimal studio product photograph, no logos or text." },
+  { slug: "prod-spazzola-2", ratio: "1:1",
+    prompt: "Unbranded black flat paddle hair brush on a beige stone surface, clean studio still life, no logos or text." },
+  { slug: "prod-spazzola-3", ratio: "1:1",
+    prompt: "Unbranded black oval dressing hair brush lying on cream marble, soft studio light, no logos or text." },
+  { slug: "prod-spray-1", ratio: "1:1",
+    prompt: "Unbranded frosted glass spray bottle with a black cap on a cream marble surface, elegant minimal cosmetic still life, blank label with no text." },
+  { slug: "prod-spray-2", ratio: "1:1",
+    prompt: "Unbranded slim white cosmetic spray bottle on a beige background, soft studio shadow, blank label with no text." },
+  { slug: "prod-olio-cuticole", ratio: "1:1",
+    prompt: "Small amber glass dropper bottle of cuticle oil on a cream marble surface with a sprig of almond blossom, warm still life, blank label with no text." },
+  { slug: "prod-crema-mani", ratio: "1:1",
+    prompt: "Elegant unbranded cream-coloured hand cream tube on a soft beige linen surface, minimal cosmetic still life, blank label with no text." },
+  { slug: "prod-base-rinforzante", ratio: "1:1",
+    prompt: "Clear nail treatment bottle with a black cap on a pale marble surface, glossy liquid visible, minimal still life, blank label with no text." },
+  { slug: "prod-lima-vetro", ratio: "1:1",
+    prompt: "Crystal glass nail file resting on a cream linen cloth, catching the light, close-up still life, no text." },
+  { slug: "prod-scrub-piedi", ratio: "1:1",
+    prompt: "Open glass jar of coarse salt body scrub on a beige stone surface with scattered salt crystals, warm still life, blank label with no text." },
+  { slug: "prod-kit-rimozione", ratio: "1:1",
+    prompt: "Flat lay of nail polish remover kit on cream marble: small bottle, cotton pads, wooden cuticle stick, foil wraps, no text or logos." },
 ];
 
 function argomento(nome) {
@@ -125,9 +166,11 @@ async function creaTask(img) {
       model: MODELLO,
       input: {
         prompt: `${img.prompt} ${STILE}`,
-        aspect_ratio: img.ratio,
-        resolution: img.risoluzione,
-        output_format: "jpg",
+        // nano-banana genera nativamente a 1K: il rapporto decide le dimensioni
+        // (16:9 → 1344×768, 1:1 → 1024×1024). Non esiste un parametro separato
+        // per la risoluzione.
+        image_size: img.ratio,
+        output_format: "png",
       },
     }),
   });
@@ -214,7 +257,7 @@ async function main() {
   const falliti = [];
 
   for (const [i, img] of daFare.entries()) {
-    const file = path.join(DESTINAZIONE, `${img.slug}.jpg`);
+    const file = path.join(DESTINAZIONE, `${img.slug}.png`);
     const etichetta = `[${i + 1}/${daFare.length}] ${img.slug}`;
 
     if ((await esiste(file)) && !rigenera.includes(img.slug)) {
@@ -234,8 +277,7 @@ async function main() {
         stile: STILE,
         modello: MODELLO,
         aspetto: img.ratio,
-        risoluzione: img.risoluzione,
-        byte,
+                byte,
         generataIl: new Date().toISOString(),
       };
       await fs.writeFile(MANIFEST, JSON.stringify(manifest, null, 2) + "\n");

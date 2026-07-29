@@ -51,6 +51,11 @@ export function dataBreve(d: Date): string {
   ].slice(0, 3)}`;
 }
 
+/** Numero con separatore delle migliaia, es. 1034 → "1.034". */
+export function numero(n: number): string {
+  return new Intl.NumberFormat("it-IT", { useGrouping: true }).format(n);
+}
+
 export function euro(n: number): string {
   return new Intl.NumberFormat("it-IT", {
     style: "currency",

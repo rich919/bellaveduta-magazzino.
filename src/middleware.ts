@@ -20,19 +20,24 @@ import { NextResponse, type NextRequest } from "next/server";
 import { COOKIE_SESSIONE, segretiConfigurati, tokenValido } from "@/lib/auth";
 
 const PREFISSO_ADMIN = "/gestionale";
+/** L'API che apre e chiude la sessione: vive fuori da /gestionale. */
+const PREFISSO_API_ADMIN = "/api/gestionale";
 
 function modalita(): "site" | "admin" {
   return process.env.APP_MODE === "admin" ? "admin" : "site";
 }
 
+const dentro = (percorso: string, prefisso: string) =>
+  percorso === prefisso || percorso.startsWith(`${prefisso}/`);
+
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  const eRottaAdmin =
-    pathname === PREFISSO_ADMIN || pathname.startsWith(`${PREFISSO_ADMIN}/`);
+  const ePagina = dentro(pathname, PREFISSO_ADMIN);
+  const eApi = dentro(pathname, PREFISSO_API_ADMIN);
 
   // ── Dominio pubblico ────────────────────────────────────────────────
   if (modalita() === "site") {
-    if (eRottaAdmin) {
+    if (ePagina || eApi) {
       // 404, non 403: sul sito delle clienti il gestionale non esiste proprio.
       return NextResponse.rewrite(new URL("/404", req.url), { status: 404 });
     }
@@ -40,13 +45,19 @@ export async function middleware(req: NextRequest) {
   }
 
   // ── Dominio gestionale ──────────────────────────────────────────────
+  // L'API di accesso deve passare sempre: se la blocchiamo qui, la pagina di
+  // login non ha modo di verificare la password e il gestionale è inutilizzabile.
+  if (eApi) {
+    return NextResponse.next();
+  }
+
   // La radice porta direttamente alla dashboard.
   if (pathname === "/") {
     return NextResponse.redirect(new URL(PREFISSO_ADMIN, req.url));
   }
 
   // Qui non deve esistere nulla del sito pubblico.
-  if (!eRottaAdmin) {
+  if (!ePagina) {
     return NextResponse.rewrite(new URL("/404", req.url), { status: 404 });
   }
 

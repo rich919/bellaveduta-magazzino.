@@ -1,36 +1,148 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Claudia Nails — app del centro estetico
 
-## Getting Started
+App mobile per **Claudia Nails**, centro estetico in Via Nicolò da Pistoia 38,
+Roma Garbatella. Le clienti prenotano scegliendo trattamento, operatrice, giorno
+e orario; la titolare vede la giornata in un gestionale su un indirizzo separato.
 
-First, run the development server:
+**È una demo.** Prima di darla in mano alle clienti va letta la sezione
+"Cosa va confermato" in fondo: alcuni dati sono ipotesi dichiarate.
+
+## Avvio
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local     # poi riempi i valori
+npm run dev                    # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Comando | Cosa fa |
+|---|---|
+| `npm run dev` | sviluppo |
+| `npm run build` | build di produzione |
+| `npm test` | test della disponibilità (19 casi) |
+| `npm run lint` | ESLint |
+| `npm run immagini` | rigenera le foto con kie.ai (serve `KIE_API_KEY`) |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Due indirizzi, una sola codebase
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Il gestionale non è una pagina nascosta del sito: sul dominio pubblico il suo
+codice **non è raggiungibile**. Lo decide `APP_MODE`, letto da `src/middleware.ts`.
 
-## Learn More
+| Progetto Vercel | `APP_MODE` | Espone |
+|---|---|---|
+| `claudia-nails` | `site` (default) | solo il sito. `/gestionale` → **404** |
+| `claudia-nails-gestionale` | `admin` | solo la dashboard, dietro login. Le rotte pubbliche → **404** |
 
-To learn more about Next.js, take a look at the following resources:
+Entrambi i progetti puntano allo **stesso repository**: cambia solo la variabile
+d'ambiente.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Variabili su Vercel
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Sul progetto `site` basta `APP_MODE=site`.
+Sul progetto `admin` servono tutte e tre, altrimenti l'app si rifiuta di partire:
 
-## Deploy on Vercel
+```
+APP_MODE=admin
+ADMIN_PASSWORD=<la password del salone>
+AUTH_SECRET=<openssl rand -base64 32>
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+`KIE_API_KEY` serve **solo in locale** per rigenerare le foto: su Vercel non va messa.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Struttura
+
+```
+src/app/(cliente)/      home, servizi, prenota, shop, profilo, dove siamo
+src/app/gestionale/     login e cruscotto
+src/app/api/gestionale/ apertura e chiusura sessione
+src/middleware.ts       separazione dei due indirizzi + guardia del cookie
+src/lib/data/           listino, operatrici, prodotti, anagrafica salone
+src/lib/booking/slots.ts   calcolo della disponibilità (+ test)
+src/lib/store/          layer dati, oggi su localStorage
+src/lib/payments/       layer pagamenti, oggi simulato
+scripts/                generazione e compressione delle immagini
+```
+
+### I due layer sostituibili
+
+Tutta l'app parla con due sole interfacce, mai con l'implementazione:
+
+- **`AppointmentsRepo`** (`src/lib/store/types.ts`) — oggi `local.ts` su
+  localStorage. Per passare a Supabase: scrivere `supabase.ts` che implementa la
+  stessa interfaccia e cambiare una riga in `store/index.ts`. Nessun componente
+  da toccare.
+- **`PaymentProvider`** (`src/lib/payments/types.ts`) — oggi `mock.ts`, che
+  simula. L'interfaccia è disegnata per Stripe Checkout: non esiste un campo per
+  il numero di carta, perché quei dati non devono passare da noi. Per attivare
+  Stripe: `stripe.ts` + webhook, e una riga in `payments/index.ts`.
+
+### Disponibilità
+
+`src/lib/booking/slots.ts` è la parte con più insidie, quindi è tutta in funzioni
+pure e coperta da 19 test (`npm test`). Le regole:
+
+- chiuso la domenica;
+- il trattamento deve entrare **intero** prima della chiusura: alle 18:30 non si
+  può iniziare un servizio da un'ora;
+- la disponibilità è **per operatrice**, e solo fra quelle abilitate a quella
+  categoria;
+- gli appuntamenti annullati liberano il posto;
+- oggi non si propongono orari già passati;
+- con "nessuna preferenza" l'assegnazione **bilancia il carico** e preferisce la
+  specialista. Senza questa regola Claudia, che sa fare tutto, si prendeva ogni
+  prenotazione automatica lasciando ferme le altre.
+
+## Immagini
+
+Le foto sono generate con **kie.ai** (`google/nano-banana`, 1K) e **committate**
+in `public/images`. È una scelta, non una scorciatoia: gli URL restituiti da
+kie.ai **scadono dopo 24 ore**, quindi un sito che li linkasse resterebbe senza
+foto il giorno dopo il deploy. Committandole diventano file statici sulla CDN di
+Vercel: restano per sempre, non costano nulla per visita, e la chiave API non
+raggiunge mai il browser.
+
+`scripts/optimize-images.mjs` le converte in WebP: da 48 MB a 1,4 MB, il 97% in
+meno, senza differenze visibili.
+
+Per rigenerarle:
+
+```bash
+KIE_API_KEY=... npm run immagini
+node scripts/optimize-images.mjs
+```
+
+## Cosa va confermato prima della produzione
+
+Niente di quanto segue è un bug: sono punti dove ho dovuto ipotizzare, e sono
+segnalati anche dentro l'app.
+
+1. **Prezzi del listino.** 19 voci hanno prezzo e durata letti uno per uno sulla
+   scheda Treatwell del salone. Le altre sono ipotesi ancorate al "da € X" che
+   Treatwell mostra per quelle categorie: nel codice hanno `verificato: false` e
+   nell'app portano l'etichetta *da confermare*.
+2. **Nomi delle operatrici.** Claudia, Martina, Sara e Giulia sono segnaposto:
+   né Treatwell né claudianails.it pubblicano il personale. Si cambiano in
+   `src/lib/data/staff.ts` mantenendo gli `id`.
+3. **Prodotti ghd.** I nomi sono quelli reali di catalogo, i prezzi sono stime al
+   listino italiano. Le **fotografie sono still life generici e senza marchio**:
+   non riproducono i prodotti ghd e vanno sostituite con quelle ufficiali fornite
+   dal marchio, come è prassi per un rivenditore autorizzato.
+4. **Tessera a punti.** Soglie, premi e vantaggi in `src/lib/membership.ts` sono
+   una proposta: quanto essere generosi è una decisione commerciale.
+5. **Recensioni.** Quelle in `salon.ts` sono scritte per la demo. Le vere vanno
+   importate da Treatwell.
+6. **Ritratti e ambienti.** Sono immagini generate: non ritraggono il salone
+   reale né persone reali.
+
+## Limite noto: i dati non sono condivisi
+
+`localStorage` è **per browser e per dominio**. Conseguenze:
+
+- due dispositivi diversi vedono agende diverse;
+- una prenotazione fatta sul dominio pubblico **non compare** sul dominio del
+  gestionale, perché sono due origini distinte.
+
+Il gestionale mostra comunque un'agenda completa e realistica generata dal seed,
+quindi la demo del cruscotto funziona. Ma il passaggio "prenoto e la titolare lo
+vede" richiede un database condiviso: è esattamente ciò che risolve il passaggio
+a Supabase descritto sopra, ed è il primo lavoro da fare dopo la demo.

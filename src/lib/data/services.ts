@@ -31,6 +31,12 @@ export type CategoriaId =
 export type Categoria = {
   id: CategoriaId;
   nome: string;
+  /**
+   * Nome cortissimo per le icone tonde della home e per i filtri.
+   * Non si può ricavare tagliando `nome` alla prima parola: "Semipermanente
+   * mani" e "Semipermanente piedi" diventerebbero due etichette identiche.
+   */
+  etichetta: string;
   /** Testo breve mostrato sotto il titolo di categoria nel listino. */
   descrizione: string;
   /** Token CSS della tinta che codifica la categoria in tutta l'app. */
@@ -40,60 +46,70 @@ export type Categoria = {
 export const CATEGORIE: readonly Categoria[] = [
   {
     id: "semipermanente-mani",
+    etichetta: "Mani",
     nome: "Semipermanente mani",
     descrizione: "Smalto che regge tre settimane, con o senza rinforzo.",
     tinta: "--cat-semi-mani",
   },
   {
     id: "semipermanente-piedi",
+    etichetta: "Piedi",
     nome: "Semipermanente piedi",
     descrizione: "Lo stesso smalto, sui piedi.",
     tinta: "--cat-semi-piedi",
   },
   {
     id: "semigel",
+    etichetta: "Semigel",
     nome: "Semigel",
     descrizione: "Struttura e colore insieme: baby boomer, french, correttivo.",
     tinta: "--cat-semigel",
   },
   {
     id: "ricostruzione",
+    etichetta: "Ricostruz.",
     nome: "Ricostruzione unghie",
     descrizione: "Allungamento, refill e riparazioni.",
     tinta: "--cat-ricostruzione",
   },
   {
     id: "manicure",
+    etichetta: "Manicure",
     nome: "Manicure e trattamenti mani",
     descrizione: "Forma, cuticole, cura della mano.",
     tinta: "--cat-manicure",
   },
   {
     id: "pedicure",
+    etichetta: "Pedicure",
     nome: "Pedicure e trattamenti piedi",
     descrizione: "Estetico e curativo.",
     tinta: "--cat-pedicure",
   },
   {
     id: "ceretta",
+    etichetta: "Ceretta",
     nome: "Ceretta e depilazione",
     descrizione: "Corpo, viso e zone intime.",
     tinta: "--cat-ceretta",
   },
   {
     id: "viso",
+    etichetta: "Viso",
     nome: "Trattamenti viso",
     descrizione: "Pulizia profonda e idratazione.",
     tinta: "--cat-viso",
   },
   {
     id: "ciglia",
+    etichetta: "Ciglia",
     nome: "Ciglia e sopracciglia",
     descrizione: "Extension e laminazione.",
     tinta: "--cat-ciglia",
   },
   {
     id: "massaggi",
+    etichetta: "Massaggi",
     nome: "Massaggi e corpo",
     descrizione: "Rilassanti, decontratturanti, esfolianti.",
     tinta: "--cat-massaggi",

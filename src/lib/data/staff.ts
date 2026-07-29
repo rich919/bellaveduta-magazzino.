@@ -53,7 +53,7 @@ export const OPERATRICI: readonly Operatrice[] = [
     bio: "Ha aperto il salone e lavora ancora in postazione tutti i giorni. Fa un po' di tutto, ma la ricostruzione è la sua.",
     competenze: TUTTE,
     tinta: "--op-claudia",
-    foto: "/images/operatrice-claudia.jpg",
+    foto: "/images/operatrice-claudia.webp",
   },
   {
     id: "martina",
@@ -69,7 +69,7 @@ export const OPERATRICI: readonly Operatrice[] = [
       "manicure",
     ],
     tinta: "--op-martina",
-    foto: "/images/operatrice-martina.jpg",
+    foto: "/images/operatrice-martina.webp",
   },
   {
     id: "sara",
@@ -79,7 +79,7 @@ export const OPERATRICI: readonly Operatrice[] = [
     bio: "Ceretta e pedicure. Ha la mano leggera, cosa che sulla ceretta si sente.",
     competenze: ["ceretta", "pedicure", "manicure"],
     tinta: "--op-sara",
-    foto: "/images/operatrice-sara.jpg",
+    foto: "/images/operatrice-sara.webp",
   },
   {
     id: "giulia",
@@ -89,7 +89,7 @@ export const OPERATRICI: readonly Operatrice[] = [
     bio: "Viso, ciglia e massaggi. Segue anche i trattamenti per la pelle sensibile.",
     competenze: ["viso", "ciglia", "massaggi"],
     tinta: "--op-giulia",
-    foto: "/images/operatrice-giulia.jpg",
+    foto: "/images/operatrice-giulia.webp",
   },
 ];
 

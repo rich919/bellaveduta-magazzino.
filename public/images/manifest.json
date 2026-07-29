@@ -1,0 +1,335 @@
+{
+  "hero": {
+    "prompt": "Wide interior of an elegant small nail and beauty salon: manicure stations with warm wood surfaces, a wall of nail polish bottles arranged by colour, a comfortable chair, plants near a large window.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "16:9",
+    "byte": 1520070,
+    "generataIl": "2026-07-29T11:20:48.717Z",
+    "formato": "webp"
+  },
+  "og": {
+    "prompt": "Elegant wide shot of a nail salon interior with warm lighting, welcoming and professional, generous empty space in the frame for overlaying text later.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "16:9",
+    "byte": 1706561,
+    "generataIl": "2026-07-29T11:21:01.859Z",
+    "formato": "webp"
+  },
+  "cat-semipermanente-mani": {
+    "prompt": "Close-up of a woman's hands with freshly applied glossy deep red semi-permanent nail polish, resting on a folded linen towel.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "4:3",
+    "byte": 1328592,
+    "generataIl": "2026-07-29T11:21:25.983Z",
+    "formato": "webp"
+  },
+  "cat-semipermanente-piedi": {
+    "prompt": "Close-up of clean feet with freshly painted glossy nail polish during a pedicure, spa setting, soft towel underneath.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "4:3",
+    "byte": 1391463,
+    "generataIl": "2026-07-29T11:21:52.703Z",
+    "formato": "webp"
+  },
+  "cat-semigel": {
+    "prompt": "Extreme close-up of almond-shaped nails with a baby boomer gradient manicure, nude fading to white, high gloss finish.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "4:3",
+    "byte": 1189125,
+    "generataIl": "2026-07-29T11:22:03.384Z",
+    "formato": "webp"
+  },
+  "cat-ricostruzione": {
+    "prompt": "Nail technician's hands shaping a gel nail extension with a file, precise detailed work, macro shot, professional lamp nearby.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "4:3",
+    "byte": 1287114,
+    "generataIl": "2026-07-29T11:22:13.469Z",
+    "formato": "webp"
+  },
+  "cat-manicure": {
+    "prompt": "Manicure in progress: technician tending to cuticles with professional tools, client's hand resting on a small velvet cushion.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "4:3",
+    "byte": 1224123,
+    "generataIl": "2026-07-29T11:22:38.983Z",
+    "formato": "webp"
+  },
+  "cat-pedicure": {
+    "prompt": "Pedicure treatment in a calm salon, feet in a ceramic basin with warm water and flower petals, folded towels nearby.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "4:3",
+    "byte": 1225385,
+    "generataIl": "2026-07-29T11:23:10.662Z",
+    "formato": "webp"
+  },
+  "cat-ceretta": {
+    "prompt": "Clean minimal beauty treatment room prepared for waxing: fresh white linens on a treatment bed, wax warmer, folded towels, soft daylight.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "4:3",
+    "byte": 1287423,
+    "generataIl": "2026-07-29T11:23:21.585Z",
+    "formato": "webp"
+  },
+  "cat-viso": {
+    "prompt": "Woman relaxing during a facial treatment, clay mask applied, eyes closed, serene expression, soft spa lighting.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "4:3",
+    "byte": 1577556,
+    "generataIl": "2026-07-29T11:23:35.997Z",
+    "formato": "webp"
+  },
+  "cat-ciglia": {
+    "prompt": "Macro close-up of a closed eye with beautifully applied volume eyelash extensions, natural skin texture, soft light.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "4:3",
+    "byte": 1537258,
+    "generataIl": "2026-07-29T11:23:45.818Z",
+    "formato": "webp"
+  },
+  "cat-massaggi": {
+    "prompt": "Relaxing back massage in a warm dimly lit treatment room, therapist's hands mid-stroke, rolled towels and a candle nearby.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "4:3",
+    "byte": 1467576,
+    "generataIl": "2026-07-29T11:23:55.776Z",
+    "formato": "webp"
+  },
+  "operatrice-claudia": {
+    "prompt": "Portrait of a confident Italian woman in her forties, salon owner, dark hair pulled back, warm genuine smile, simple black work uniform, standing in her nail salon, background softly blurred.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "3:4",
+    "byte": 1279903,
+    "generataIl": "2026-07-29T11:24:05.853Z",
+    "formato": "webp"
+  },
+  "operatrice-martina": {
+    "prompt": "Portrait of a young Italian woman in her late twenties, nail artist, hair tied back, friendly open expression, black work uniform, salon background softly blurred.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "3:4",
+    "byte": 1527177,
+    "generataIl": "2026-07-29T11:24:15.643Z",
+    "formato": "webp"
+  },
+  "operatrice-sara": {
+    "prompt": "Portrait of an Italian woman in her thirties, beautician, shoulder-length brown hair, calm and welcoming expression, black work uniform, treatment room blurred behind her.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "3:4",
+    "byte": 1470857,
+    "generataIl": "2026-07-29T11:24:25.609Z",
+    "formato": "webp"
+  },
+  "operatrice-giulia": {
+    "prompt": "Portrait of an Italian woman in her early thirties, aesthetician specialising in facials, curly hair, gentle smile, black work uniform, soft blurred background.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "3:4",
+    "byte": 1224850,
+    "generataIl": "2026-07-29T11:24:41.882Z",
+    "formato": "webp"
+  },
+  "interno-1": {
+    "prompt": "Detail of a nail polish display wall in a salon, hundreds of bottles arranged in a colour gradient from nude to deep burgundy.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "3:2",
+    "byte": 1516237,
+    "generataIl": "2026-07-29T11:24:51.674Z",
+    "formato": "webp"
+  },
+  "interno-2": {
+    "prompt": "Reception corner of a small beauty salon: wooden counter, vase with dried flowers, appointment book, warm afternoon light.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "3:2",
+    "byte": 1542587,
+    "generataIl": "2026-07-29T11:25:01.705Z",
+    "formato": "webp"
+  },
+  "interno-3": {
+    "prompt": "Quiet treatment room in a beauty salon, neatly folded towels, professional lamp, plants, clean minimal Italian interior.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "3:2",
+    "byte": 1222680,
+    "generataIl": "2026-07-29T11:25:20.976Z",
+    "formato": "webp"
+  },
+  "prod-piastra-2": {
+    "prompt": "Unbranded glossy black ceramic hair straightener standing upright on a beige stone surface, minimal studio still life, no logos or text.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "1:1",
+    "byte": 1261631,
+    "generataIl": "2026-07-29T11:26:06.263Z",
+    "formato": "webp"
+  },
+  "prod-piastra-3": {
+    "prompt": "Unbranded dark grey professional hair styler on a linen cloth, warm side light, minimal studio product photograph, no logos or text.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "1:1",
+    "byte": 1508970,
+    "generataIl": "2026-07-29T11:26:16.059Z",
+    "formato": "webp"
+  },
+  "prod-piastra-4": {
+    "prompt": "Unbranded cordless black hair straightener with a small charging base on a pale marble surface, clean studio still life, no logos or text.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "1:1",
+    "byte": 1331024,
+    "generataIl": "2026-07-29T11:26:26.066Z",
+    "formato": "webp"
+  },
+  "prod-ferro-1": {
+    "prompt": "Unbranded black conical curling wand on a pale marble surface with a soft shadow, studio still life, no logos or text.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "1:1",
+    "byte": 1407071,
+    "generataIl": "2026-07-29T11:26:58.039Z",
+    "formato": "webp"
+  },
+  "prod-spazzola-1": {
+    "prompt": "Unbranded black round hot air styling brush on a cream linen surface, minimal studio product photograph, no logos or text.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "1:1",
+    "byte": 1519862,
+    "generataIl": "2026-07-29T11:27:10.832Z",
+    "formato": "webp"
+  },
+  "prod-spazzola-2": {
+    "prompt": "Unbranded black flat paddle hair brush on a beige stone surface, clean studio still life, no logos or text.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "1:1",
+    "byte": 1120621,
+    "generataIl": "2026-07-29T11:27:26.760Z",
+    "formato": "webp"
+  },
+  "prod-spazzola-3": {
+    "prompt": "Unbranded black oval dressing hair brush lying on cream marble, soft studio light, no logos or text.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "1:1",
+    "byte": 1312588,
+    "generataIl": "2026-07-29T11:27:36.735Z",
+    "formato": "webp"
+  },
+  "prod-spray-1": {
+    "prompt": "Unbranded frosted glass spray bottle with a black cap on a cream marble surface, elegant minimal cosmetic still life, blank label with no text.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "1:1",
+    "byte": 1176821,
+    "generataIl": "2026-07-29T11:27:46.720Z",
+    "formato": "webp"
+  },
+  "prod-spray-2": {
+    "prompt": "Unbranded slim white cosmetic spray bottle on a beige background, soft studio shadow, blank label with no text.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "1:1",
+    "byte": 1029730,
+    "generataIl": "2026-07-29T11:28:02.918Z",
+    "formato": "webp"
+  },
+  "prod-olio-cuticole": {
+    "prompt": "Small amber glass dropper bottle of cuticle oil on a cream marble surface with a sprig of almond blossom, warm still life, blank label with no text.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "1:1",
+    "byte": 1180221,
+    "generataIl": "2026-07-29T11:28:28.158Z",
+    "formato": "webp"
+  },
+  "prod-crema-mani": {
+    "prompt": "Elegant unbranded cream-coloured hand cream tube on a soft beige linen surface, minimal cosmetic still life, blank label with no text.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "1:1",
+    "byte": 1538807,
+    "generataIl": "2026-07-29T11:28:38.079Z",
+    "formato": "webp"
+  },
+  "prod-base-rinforzante": {
+    "prompt": "Clear nail treatment bottle with a black cap on a pale marble surface, glossy liquid visible, minimal still life, blank label with no text.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "1:1",
+    "byte": 963527,
+    "generataIl": "2026-07-29T11:28:53.951Z",
+    "formato": "webp"
+  },
+  "prod-lima-vetro": {
+    "prompt": "Crystal glass nail file resting on a cream linen cloth, catching the light, close-up still life, no text.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "1:1",
+    "byte": 1550401,
+    "generataIl": "2026-07-29T11:29:04.543Z",
+    "formato": "webp"
+  },
+  "prod-scrub-piedi": {
+    "prompt": "Open glass jar of coarse salt body scrub on a beige stone surface with scattered salt crystals, warm still life, blank label with no text.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "1:1",
+    "byte": 1609726,
+    "generataIl": "2026-07-29T11:29:14.585Z",
+    "formato": "webp"
+  },
+  "prod-kit-rimozione": {
+    "prompt": "Flat lay of nail polish remover kit on cream marble: small bottle, cotton pads, wooden cuticle stick, foil wraps, no text or logos.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "1:1",
+    "byte": 1326648,
+    "generataIl": "2026-07-29T11:29:40.038Z",
+    "formato": "webp"
+  },
+  "prod-piastra-1": {
+    "prompt": "Unbranded matte black professional hair straightener lying on a cream marble surface, studio still life, soft shadow, no logos or text anywhere.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "1:1",
+    "byte": 1228279,
+    "generataIl": "2026-07-29T11:30:36.274Z",
+    "formato": "webp"
+  },
+  "prod-phon-1": {
+    "prompt": "Unbranded matte black professional hair dryer on a cream background, elegant studio product photograph, soft shadow, no logos or text.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "1:1",
+    "byte": 1410938,
+    "generataIl": "2026-07-29T11:30:45.969Z",
+    "formato": "webp"
+  },
+  "prod-phon-2": {
+    "prompt": "Unbranded black hair dryer with a concentrator nozzle beside it on a beige surface, minimal studio still life, no logos or text.",
+    "stile": "Professional editorial photography for an Italian beauty salon in Rome. Soft natural window light, warm and calm atmosphere, shallow depth of field, muted sophisticated color palette, no text, no logos, no watermarks, photorealistic, high detail.",
+    "modello": "google/nano-banana",
+    "aspetto": "1:1",
+    "byte": 1031148,
+    "generataIl": "2026-07-29T11:31:02.158Z",
+    "formato": "webp"
+  }
+}
