@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Icona } from "@/components/Icone";
@@ -24,6 +24,19 @@ import { puntiPerSpesa } from "@/lib/membership";
 
 type Fase = "scelta" | "compilazione" | "pagamento" | "fatto";
 
+/**
+ * Riporta la schermata in cima.
+ *
+ * Ce ne sono due di contenitori che scorrono, a seconda della larghezza:
+ * sopra i 700px scorre `.schermo` dentro la cornice del telefono, sotto
+ * scorre la finestra. Riportarne su uno solo lascia l'altro dov'era, ed è
+ * esattamente il caso che rompeva la conferma.
+ */
+function tornaSu() {
+  window.scrollTo(0, 0);
+  document.querySelector(".schermo")?.scrollTo(0, 0);
+}
+
 export function Prenotazione() {
   const parametri = useSearchParams();
   const { sedeId, registraPrenotazione } = useStatoApp();
@@ -44,6 +57,23 @@ export function Prenotazione() {
   const [caricamentoSlot, setCaricamentoSlot] = useState(false);
 
   const srv = servizioId ? servizio(servizioId) : null;
+
+  /*
+   * Ogni passo del wizard sostituisce l'intera schermata, ma il browser tiene
+   * la posizione di scorrimento di quella precedente. Il pulsante di conferma
+   * sta in fondo a una pagina lunga: senza questo, confermando ci si ritrova
+   * nel footer invece che davanti alla conferma.
+   */
+  const schermata = !srv ? "scelta-servizio" : fase === "fatto" ? "fatto" : "wizard";
+  const schermataPrec = useRef(schermata);
+  useEffect(() => {
+    // Non al primo render: lì ci pensa già la navigazione di Next, e forzarlo
+    // calpesterebbe il ripristino della posizione quando si torna indietro.
+    if (schermataPrec.current !== schermata) {
+      schermataPrec.current = schermata;
+      tornaSu();
+    }
+  }, [schermata]);
 
   // Ogni cambio di giorno rilegge l'agenda: gli slot dipendono da cosa c'è già.
   useEffect(() => {

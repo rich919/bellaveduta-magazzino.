@@ -47,6 +47,28 @@ function scegli<T>(r: () => number, elenco: readonly T[]): T {
   return elenco[Math.floor(r() * elenco.length)];
 }
 
+/**
+ * Probabilità di lasciare un buco in agenda a ogni passo.
+ * Più alta = giornata più libera.
+ *
+ * Il sabato è il giorno pieno, e fin qui è ovvio. Agosto invece va trattato a
+ * parte: a Roma è il mese in cui il salone respira, le clienti sono via e
+ * intorno a Ferragosto l'agenda si svuota quasi del tutto. Un agosto fitto
+ * come marzo non somiglia a una stagione vera — e riempiendo ogni ora toglie
+ * anche gli orari liberi a chi prova a prenotare dall'app.
+ *
+ * Qui si cambia soltanto quanto è popolata l'agenda dimostrativa: gli orari di
+ * apertura restano quelli veri, il salone non risulta chiuso.
+ */
+function probabilitaBuco(data: Date, eSabato: boolean): number {
+  const base = eSabato ? 0.12 : 0.3;
+  if (data.getMonth() !== 7) return base;
+  const g = data.getDate();
+  // La settimana di Ferragosto è la più scarica dell'anno.
+  if (g >= 10 && g <= 20) return eSabato ? 0.72 : 0.84;
+  return eSabato ? 0.45 : 0.62;
+}
+
 /** Appuntamenti di un singolo giorno, per una sola sede. */
 function perGiorno(data: Date, oggi: Date, sedeId: SedeId): Appuntamento[] {
   const fascia = fasciaDi(data);
@@ -74,9 +96,10 @@ function perGiorno(data: Date, oggi: Date, sedeId: SedeId): Appuntamento[] {
     if (suoi.length === 0) continue;
     let t = fascia.apre + Math.floor(r() * 40);
 
+    const buco = probabilitaBuco(data, eSabato);
+
     while (t < fascia.chiude - 20) {
-      // Il sabato è più fitto: meno probabilità di lasciare un buco.
-      if (r() < (eSabato ? 0.12 : 0.3)) {
+      if (r() < buco) {
         t += 30 + Math.floor(r() * 45);
         continue;
       }
