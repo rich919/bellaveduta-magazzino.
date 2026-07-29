@@ -520,13 +520,14 @@ button {
 .cats { display: flex; gap: 0.55rem; overflow-x: auto; padding: 1.1rem 1.1rem 0.4rem;
   scrollbar-width: none; }
 .cats::-webkit-scrollbar { display: none; }
-.cat { flex: none; width: 64px; text-align: center; display: flex; flex-direction: column;
-  align-items: center; gap: 0.35rem; }
-.cat-ico { width: 54px; height: 54px; border-radius: 15px; display: grid; place-items: center;
+.cat { flex: none; width: 72px; text-align: center; display: flex; flex-direction: column;
+  align-items: center; gap: 0.45rem; }
+/* Foto tonda invece del riquadro con l'icona: una manicure si riconosce dalla
+   foto in un istante, da un glifo bianco su fondo colorato no. */
+.cat-foto { width: 66px; height: 66px; border-radius: 999px; box-shadow: var(--ombra);
   transition: transform 0.2s var(--ease); }
-.cat:active .cat-ico { transform: scale(0.93); }
-.cat-ico svg { width: 25px; height: 25px; color: #fff; }
-.cat span { font-size: 0.58rem; color: var(--testo); line-height: 1.15; }
+.cat:active .cat-foto { transform: scale(0.93); }
+.cat span { font-size: 0.62rem; color: var(--testo); line-height: 1.15; font-weight: 500; }
 
 .carosello { display: flex; gap: 0.7rem; overflow-x: auto; padding: 0 1.1rem 0.4rem;
   scrollbar-width: none; }
@@ -582,6 +583,43 @@ button {
   transition: all 0.2s var(--ease); }
 .chip[aria-pressed="true"] { background: var(--rosa); border-color: var(--rosa);
   color: var(--su-rosa); font-weight: 600; }
+
+/* ═══════════ SERVIZI: SCELTA PER CATEGORIA ═══════════ */
+.domanda { padding: 0.2rem 1.1rem 1rem; }
+.domanda h2 { font-family: var(--serif); font-size: 1.85rem; line-height: 1.12;
+  letter-spacing: -0.02em; }
+.domanda h2 span { color: var(--oro); font-size: 1.25rem; vertical-align: 0.35em; }
+.domanda .filetto { margin-top: 0.75rem; }
+
+.grigliacat { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem;
+  padding: 0.3rem 1.1rem 0; }
+.cartello { min-width: 0; border: 0; font: inherit; cursor: pointer; text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 0.1rem;
+  background: var(--card); border-radius: 18px; box-shadow: var(--ombra);
+  padding: 0.85rem 0.4rem 0.75rem; transition: transform 0.2s var(--ease); }
+.cartello:active { transform: scale(0.96); }
+.cartello-foto { width: 62px; height: 62px; border-radius: 999px; margin-bottom: 0.45rem; }
+.cartello b { font-size: 0.75rem; font-weight: 600; color: var(--inchiostro);
+  line-height: 1.2; }
+.cartello small { font-size: 0.6rem; color: var(--testo-2); }
+
+/* La fascia scura in fondo: è l'unica superficie scura della schermata, così
+   chiude la griglia invece di sembrarne un altro riquadro. Usa `--scena`, che
+   resta scura anche in tema scuro: `--inchiostro` lì diventa chiaro e il testo
+   sparirebbe. Per lo stesso motivo il testo qui è un valore fisso e non un
+   token, che si ribalterebbe insieme al tema. */
+.invito { display: flex; align-items: center; gap: 0.8rem; width: calc(100% - 2.2rem);
+  margin: 1.2rem 1.1rem 0; border: 0; font: inherit; text-align: left; cursor: pointer;
+  background: var(--scena); color: #f3f1ea; border-radius: var(--r-card);
+  padding: 0.95rem 1.1rem; box-shadow: var(--ombra-2);
+  transition: transform 0.2s var(--ease); }
+.invito:active { transform: scale(0.98); }
+.invito span:first-child { flex: 1; min-width: 0; }
+.invito b { display: block; font-size: 0.86rem; font-weight: 600; }
+.invito small { display: block; font-size: 0.74rem; opacity: 0.78; margin-top: 0.15rem; }
+.invito-freccia { flex: none; width: 36px; height: 36px; border-radius: 999px;
+  display: grid; place-items: center; background: rgb(255 255 255 / 0.14);
+  border: 1px solid rgb(255 255 255 / 0.22); }
 
 .riga { width: 100%; text-align: left; font: inherit; color: inherit; cursor: pointer; display: flex; gap: 0.75rem; align-items: center; width: 100%; text-align: left;
   background: var(--card); border-radius: var(--r-card); box-shadow: var(--ombra);

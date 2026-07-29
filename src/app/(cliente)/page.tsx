@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Icona, ICONA_CATEGORIA, type NomeIcona } from "@/components/Icone";
+import { Icona, type NomeIcona } from "@/components/Icone";
 import { Foto, fotoCategoria } from "@/components/app/Pezzi";
 import { CardTessera } from "@/components/app/CardTessera";
 import { ProssimoAppuntamento } from "@/components/app/ProssimoAppuntamento";
@@ -95,7 +95,7 @@ export default function Home() {
       </nav>
 
       <div className="sez-cap pad">
-        <h2 className="sez-tit">Dove vuoi venire</h2>
+        <h2 className="sez-tit">Scegli il tuo centro</h2>
       </div>
       <div className="pad">
         <SelettoreSede />
@@ -130,12 +130,21 @@ export default function Home() {
 
       <BloccoPremium />
 
+      <div className="sez-cap pad">
+        <h2 className="sez-tit">Cosa cerchi</h2>
+        <Link href="/servizi" className="piu">
+          Categorie <Icona nome="freccia" style={{ width: 13, height: 13 }} />
+        </Link>
+      </div>
       <div className="cats">
         {CATEGORIE.map((c) => (
           <Link key={c.id} href={`/servizi?categoria=${c.id}`} className="cat">
-            <span className="cat-ico" style={{ background: `var(${c.tinta})` }}>
-              <Icona nome={ICONA_CATEGORIA[c.id]} />
-            </span>
+            <Foto
+              src={fotoCategoria(c.id)}
+              alt=""
+              className="cat-foto"
+              sizes="80px"
+            />
             <span>{c.etichetta}</span>
           </Link>
         ))}
